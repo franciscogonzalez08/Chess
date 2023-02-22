@@ -26,6 +26,8 @@ private:
     std::string map_name();
 
 public:
+    Piece();
+
     Piece(
         int x, 
         int y, 

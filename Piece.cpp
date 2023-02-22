@@ -1,4 +1,7 @@
 #include "Piece.h"
+Piece::Piece(): x_postion {0}, y_postion {0}, m_name {"pawn"}, m_color {"white"}, m_images_path {"images"} {}
+
+
 Piece::Piece(
     int x = 0, 
     int y = 0, 
