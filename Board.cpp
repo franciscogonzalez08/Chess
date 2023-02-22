@@ -1,6 +1,6 @@
 #include "Board.h"
 
-Board::Board() : m_widht(0), m_height(0){}
+Board::Board() : m_widht(400), m_height(400){}
 
 Board::Board(int widht = 400, int height = 400)
     { 
@@ -25,3 +25,13 @@ void Board::draw_board(sf::RenderWindow& window){
                 }
             }
         }
+
+int Board::get_widht()
+{
+    return m_widht;
+}
+
+int Board::get_height()
+{
+    return m_height;
+}
