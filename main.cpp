@@ -12,11 +12,33 @@ private:
         "king", "queen", "bishiop", 
         "knight", "rook", "pawn"
         };
+
+    Piece *selected_piece = nullptr;
+
     int transform_pixeles_squares(int x)
     {
         // x/8 because chess board in 8x8, substract to center the piece a little. 
         int square_size = static_cast<int>(board.get_height()*x/8 - board.get_height()/50);
         return square_size;
+    }
+
+    bool piece_is_there(int x, int y, int p_x, int p_y)
+    {
+        /*
+        This function checks if there is a piece in the square
+        where the mouse is pointing.
+        Arguments:
+            x: x position of the mouse
+            y: y position of the mouse
+            p_x: x position of the piece
+            p_y: y position of the piece
+        */
+        if (x >= p_x && x <= p_x + 50 && y >= p_y && y <= p_y + 50)
+        {
+            return true;
+        }
+        return false;
+        
     }
 
     void place_pawns(sf::RenderWindow& window)
@@ -133,29 +155,92 @@ private:
 
 
 public:
+
     ChessGame()
     {}
-    
-    void start_game(sf::RenderWindow& window)
-    {
-        place_pieces_start(window);
-    }    
+
+    void run() {
+        // create a window and display it
+        sf::RenderWindow window(sf::VideoMode(600, 600), "Chess Game");
+        window.setVerticalSyncEnabled(true);
+        window.setFramerateLimit(60);
+        
+        // place the pieces on the board
+        place_pawns(window);
+        place_rooks(window);
+        place_kings(window);
+        place_queens(window);
+        place_knights(window);
+        place_bishops(window);
+
+        // main event loop
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                // handle events
+                switch (event.type) {
+                    case sf::Event::Closed:
+                        window.close();
+                        break;
+                    case sf::Event::MouseButtonPressed:
+                        if (event.mouseButton.button == sf::Mouse::Left) {
+                            // check if the click is inside any piece
+                            for (int i = 0; i < 32; i++) {
+                                if (piece_is_there(event.mouseButton.x, event.mouseButton.y, pieces[i].get_x_position(), pieces[i].get_y_position())) {
+                                    selected_piece = &pieces[i];
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    case sf::Event::MouseButtonReleased:
+                        if (event.mouseButton.button == sf::Mouse::Left) {
+                            // drop the selected piece if it's over a valid square
+                            int x = event.mouseButton.x;
+                            int y = event.mouseButton.y;
+                            if (selected_piece != nullptr) {
+                                selected_piece->set_position(x, y);
+                                selected_piece = nullptr;
+                            }
+                        }
+                        break;
+                    case sf::Event::MouseMoved:
+                        // move the selected piece with the mouse
+                        if (selected_piece != nullptr) {
+                            selected_piece->follow_mouse(window);
+                        }
+                        break;
+                }
+            }
+            
+            // clear the window
+            window.clear(sf::Color::White);
+            
+            // draw the board and the pieces
+            board.draw_board(window);
+            for (int i = 0; i < 32; i++) {
+                pieces[i].draw_piece(window);
+            }
+            
+            // display the window
+            window.display();
+        }
+    }
 };
 
+
+
+
+
+
+
+
+
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode(400, 400), "Chessboard");
-    ChessGame chess;
-    chess.start_game(window);
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.display();
-        sf::sleep(sf::milliseconds(50)); 
-    }
-
+    
+    ChessGame game;
+    game.run();
+    
     return 0;
 }
