@@ -52,3 +52,13 @@ void Piece::set_position(int x, int y)
     x_postion = x;
     y_postion = y;
 }
+
+int Piece::get_x_position()
+{
+    return x_postion;
+}
+
+int Piece::get_y_position()
+{
+    return y_postion;
+}

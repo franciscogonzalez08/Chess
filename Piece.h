@@ -37,8 +37,10 @@ public:
         );
 
     void draw_piece(sf::RenderWindow& window);
-    void Piece::follow_mouse(sf::RenderWindow& window);
+    void follow_mouse(sf::RenderWindow& window);
     void set_position(int x, int y);
+    int get_x_position();
+    int get_y_position();
 };
 
 #endif
