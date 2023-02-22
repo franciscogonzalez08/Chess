@@ -47,3 +47,8 @@ void Piece::follow_mouse(sf::RenderWindow& window)
     }
 }
 
+void Piece::set_position(int x, int y)
+{
+    x_postion = x;
+    y_postion = y;
+}
