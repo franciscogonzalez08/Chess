@@ -1,9 +1,12 @@
 #include "Board.h"
 
-Board::Board(int widht, int height)
-    : m_widht {widht}, m_height {height}
-    {
+Board::Board() : m_widht(0), m_height(0){}
 
+Board::Board(int widht = 400, int height = 400)
+    { 
+        //add assert
+        m_widht = widht;
+        m_height = height;
     }
 
 void Board::draw_board(sf::RenderWindow& window){

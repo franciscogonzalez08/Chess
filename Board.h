@@ -17,9 +17,10 @@ private:
     int m_height;
 
 public:
+    Board();
     Board(
         int widht, 
-        int height = 400
+        int height
         );
     void draw_board(sf::RenderWindow& window);
 
