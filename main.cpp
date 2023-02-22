@@ -3,6 +3,19 @@
 #include "Piece.h"
 #include "Board.h"
 
+struct Config
+{
+    int b_width = 400;
+    int b_height = 400;
+    int w_width = 400;
+    int w_height = 400;
+    std::string w_title = "Chess game";
+    int fps = 60;
+    bool Vsync = true;
+};
+
+
+
 class ChessGame {
 private:
     Board board;
@@ -12,8 +25,8 @@ private:
         "king", "queen", "bishiop", 
         "knight", "rook", "pawn"
         };
-
     Piece *selected_piece = nullptr;
+    Config game_config;    
 
     int transform_pixeles_squares(int x)
     {
@@ -182,7 +195,6 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        board.draw_board(window);
         place_pawns(window);
         place_rooks(window);
         place_kings(window);
@@ -191,9 +203,6 @@ private:
         place_bishops(window);
     }
     
-
-
-
 public:
 
     ChessGame()
@@ -201,21 +210,24 @@ public:
 
     void run() {
         /*
+
         This function runs the game.
+        Arguments:
+            b_height: height of the board
+            b_width: width of the board
+            s_height: height of the window
+            s_width: width of the window
         */
-       
+
         // create a window and display it
-        sf::RenderWindow window(sf::VideoMode(600, 600), "Chess Game");
-        window.setVerticalSyncEnabled(true);
-        window.setFramerateLimit(60);
-        
-        // place the pieces on the board
-        place_pawns(window);
-        place_rooks(window);
-        place_kings(window);
-        place_queens(window);
-        place_knights(window);
-        place_bishops(window);
+        //--------------------Want to move this to a function---------------------------------------------------
+        sf::RenderWindow window(sf::VideoMode(game_config.w_width, game_config.w_height), game_config.w_title);
+        window.setVerticalSyncEnabled(game_config.Vsync);
+        window.setFramerateLimit(game_config.fps);
+        board = Board(game_config.b_height, game_config.b_width);
+        board.draw_board(window);
+        place_pieces_start(window);
+        //------------------------------------------------------------------------------------------------------
 
         // main event loop
         while (window.isOpen()) {
