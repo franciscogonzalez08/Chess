@@ -17,7 +17,12 @@ private:
 
     int transform_pixeles_squares(int x)
     {
-        // x/8 because chess board in 8x8, substract to center the piece a little. 
+        /*
+        This function transforms the position of the squares
+        in pixeles.
+        Arguments:
+            x: position of the square
+        */
         int square_size = static_cast<int>(board.get_height()*x/8 - board.get_height()/50);
         return square_size;
     }
@@ -43,6 +48,11 @@ private:
 
     void place_pawns(sf::RenderWindow& window)
     {
+        /*
+        This function places the pawns in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         for (int i = 0; i < 8; i++)
         {
             int y_cordinate = transform_pixeles_squares(1);
@@ -63,6 +73,11 @@ private:
 
     void place_rooks(sf::RenderWindow& window)
     {
+        /*
+        This function places the rooks in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         int x_cordinate = transform_pixeles_squares(0);
         int y_cordinate = transform_pixeles_squares(7);
         pieces[16] = Piece(x_cordinate, y_cordinate, "rook","white","images");
@@ -82,6 +97,11 @@ private:
 
     void place_kings(sf::RenderWindow& window)
     {
+        /*
+        This function places the kings in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         int x_cordinate = transform_pixeles_squares(4);
         int y_cordinate = transform_pixeles_squares(0);
         pieces[20] = Piece(x_cordinate, y_cordinate, "king","black","images");
@@ -94,6 +114,11 @@ private:
 
     void place_queens(sf::RenderWindow& window)
     {
+        /*
+        This function places the queens in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         int x_cordinate = transform_pixeles_squares(3);
         int y_cordinate = transform_pixeles_squares(0);
         pieces[22] = Piece(x_cordinate, y_cordinate, "queen","black","images");
@@ -106,6 +131,11 @@ private:
 
     void place_knights(sf::RenderWindow& window)
     {
+        /*
+        This function places the knights in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         int x_cordinate = transform_pixeles_squares(1);
         int y_cordinate = transform_pixeles_squares(0);
         pieces[24] = Piece(x_cordinate, y_cordinate, "knight","black","images");
@@ -124,6 +154,11 @@ private:
     
     void place_bishops(sf::RenderWindow& window)
     {
+        /*
+        This function places the bishops in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         int x_cordinate = transform_pixeles_squares(2);
         int y_cordinate = transform_pixeles_squares(0);
         pieces[28] = Piece(x_cordinate, y_cordinate, "bishop","black","images");
@@ -142,6 +177,11 @@ private:
 
     void place_pieces_start(sf::RenderWindow& window)
     {
+        /*
+        This function places the pieces in the board.
+        Arguments:
+            window: window where the pieces will be drawn
+        */
         board.draw_board(window);
         place_pawns(window);
         place_rooks(window);
@@ -160,6 +200,10 @@ public:
     {}
 
     void run() {
+        /*
+        This function runs the game.
+        */
+       
         // create a window and display it
         sf::RenderWindow window(sf::VideoMode(600, 600), "Chess Game");
         window.setVerticalSyncEnabled(true);
@@ -241,6 +285,6 @@ int main() {
     
     ChessGame game;
     game.run();
-    
+
     return 0;
 }
