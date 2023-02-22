@@ -37,7 +37,7 @@ public:
         );
 
     void draw_piece(sf::RenderWindow& window);
-
+    void Piece::follow_mouse(sf::RenderWindow& window);
 };
 
 #endif

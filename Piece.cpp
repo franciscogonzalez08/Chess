@@ -36,3 +36,14 @@ std::string Piece::map_name()
     }
     return "";
 }
+
+void Piece::follow_mouse(sf::RenderWindow& window)
+{
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        x_postion = mousePos.x;
+        y_postion = mousePos.y;
+    }
+}
+
