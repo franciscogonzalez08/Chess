@@ -272,6 +272,27 @@ private:
         }
     }
 
+    void handle_events(sf::Event& event, sf::RenderWindow& window)
+    {
+        switch (event.type) 
+        {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::MouseButtonPressed:
+                check_mouse_click_on_piece(event.mouseButton);                        
+                break;
+            case sf::Event::MouseButtonReleased:
+                check_mouse_button_released(event.mouseButton);
+                break;
+            case sf::Event::MouseMoved:
+                check_moved_mouse(event.mouseButton, window);
+                break;
+        }
+                        
+    }
+    
+
                     
 public:
 
@@ -287,23 +308,10 @@ public:
         // main event loop
         while (window.isOpen()) {
             sf::Event event;
-            while (window.pollEvent(event)) {
-                // handle events
-                switch (event.type) {
-                    case sf::Event::Closed:
-                        window.close();
-                        break;
-                    case sf::Event::MouseButtonPressed:
-                        check_mouse_click_on_piece(event.mouseButton);                        
-                        break;
-                    case sf::Event::MouseButtonReleased:
-                        check_mouse_button_released(event.mouseButton);
-                        break;
-                    case sf::Event::MouseMoved:
-                        check_moved_mouse(event.mouseButton, window);
-                        break;
-                }
-                        
+            
+            while (window.pollEvent(event)) 
+            {
+                handle_events(event, window);
             }
             
             // clear the window
