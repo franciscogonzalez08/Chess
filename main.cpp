@@ -210,6 +210,25 @@ private:
         board.draw_board(window);
     }
 
+    void check_mouse_click_on_piece(sf::Event::MouseButtonEvent mouseButtonEvent)
+    {
+        if(mouseButtonEvent.button == sf::Mouse::Left)
+        {
+            for(int i{0}; i < 32 ; ++i)
+            {
+                int pxp = pieces[i].get_x_position();
+                int pyp = pieces[i].get_y_position();
+                if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp))
+                {
+                    selected_piece = &pieces[i];
+                    break;
+                }
+            }
+        }
+    }
+
+
+
 
 public:
 
@@ -232,17 +251,7 @@ public:
                         window.close();
                         break;
                     case sf::Event::MouseButtonPressed:
-                        //-------------------------------------------------------------------
-                        if (event.mouseButton.button == sf::Mouse::Left) {
-                            // check if the click is inside any piece
-                            for (int i = 0; i < 32; i++) {
-                                if (piece_is_there(event.mouseButton.x, event.mouseButton.y, pieces[i].get_x_position(), pieces[i].get_y_position())) {
-                                    selected_piece = &pieces[i];
-                                    break;
-                                }
-                            }
-                        }
-                        //----------------------------------------------------------------
+                        check_mouse_click_on_piece(event.mouseButton);                        
                         break;
                     case sf::Event::MouseButtonReleased:
                         if (event.mouseButton.button == sf::Mouse::Left) {
