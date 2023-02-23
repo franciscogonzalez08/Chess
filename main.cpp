@@ -216,8 +216,8 @@ private:
         {
             for(int i{0}; i < 32 ; ++i)
             {
-                int pxp = pieces[i].get_x_position();
-                int pyp = pieces[i].get_y_position();
+                int pxp {pieces[i].get_x_position()};
+                int pyp {pieces[i].get_y_position()};
                 if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp))
                 {
                     selected_piece = &pieces[i];
@@ -227,9 +227,21 @@ private:
         }
     }
 
+    void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent)
+    {
+        if (mouseButtonEvent.button == sf::Mouse::Left) {
+            int x {mouseButtonEvent.x};
+            int y {mouseButtonEvent.y};
+            if (selected_piece != nullptr) 
+            {
+            selected_piece->set_position(x, y);
+            selected_piece = nullptr;
+            }
+        }
+                        
+    }
 
-
-
+                    
 public:
 
     ChessGame()
@@ -254,16 +266,7 @@ public:
                         check_mouse_click_on_piece(event.mouseButton);                        
                         break;
                     case sf::Event::MouseButtonReleased:
-                        if (event.mouseButton.button == sf::Mouse::Left) {
-                        //-------------------------------------------------------------------
-                            int x = event.mouseButton.x;
-                            int y = event.mouseButton.y;
-                            if (selected_piece != nullptr) {
-                                selected_piece->set_position(x, y);
-                                selected_piece = nullptr;
-                            }
-                        }
-                        //-------------------------------------------------------------------
+                        check_mouse_button_released(event.mouseButton);
                         break;
                     case sf::Event::MouseMoved:
                         //-------------------------------------------------------------------
