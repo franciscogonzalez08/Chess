@@ -25,7 +25,6 @@ public:
     void draw_board(sf::RenderWindow& window);
     int get_widht();
     int get_height();
-
 };
 
 #endif

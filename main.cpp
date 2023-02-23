@@ -14,8 +14,6 @@ struct Config
     bool Vsync = true;
 };
 
-
-
 class ChessGame {
 private:
     Board board;
@@ -202,32 +200,27 @@ private:
         place_knights(window);
         place_bishops(window);
     }
-    
+
+    void create_window(sf::RenderWindow& window)
+    {
+        window.create(sf::VideoMode(game_config.w_width,game_config.w_height),game_config.w_title);
+        window.setVerticalSyncEnabled(game_config.Vsync);
+        window.setFramerateLimit(game_config.fps);
+        board = Board(game_config.b_width, game_config.b_height);
+        board.draw_board(window);
+    }
+
+
 public:
 
     ChessGame()
     {}
 
     void run() {
-        /*
-
-        This function runs the game.
-        Arguments:
-            b_height: height of the board
-            b_width: width of the board
-            s_height: height of the window
-            s_width: width of the window
-        */
-
         // create a window and display it
-        //--------------------Want to move this to a function---------------------------------------------------
-        sf::RenderWindow window(sf::VideoMode(game_config.w_width, game_config.w_height), game_config.w_title);
-        window.setVerticalSyncEnabled(game_config.Vsync);
-        window.setFramerateLimit(game_config.fps);
-        board = Board(game_config.b_height, game_config.b_width);
-        board.draw_board(window);
+        sf::RenderWindow window;
+        create_window(window);
         place_pieces_start(window);
-        //------------------------------------------------------------------------------------------------------
 
         // main event loop
         while (window.isOpen()) {
@@ -239,6 +232,7 @@ public:
                         window.close();
                         break;
                     case sf::Event::MouseButtonPressed:
+                        //-------------------------------------------------------------------
                         if (event.mouseButton.button == sf::Mouse::Left) {
                             // check if the click is inside any piece
                             for (int i = 0; i < 32; i++) {
@@ -248,10 +242,11 @@ public:
                                 }
                             }
                         }
+                        //----------------------------------------------------------------
                         break;
                     case sf::Event::MouseButtonReleased:
                         if (event.mouseButton.button == sf::Mouse::Left) {
-                            // drop the selected piece if it's over a valid square
+                        //-------------------------------------------------------------------
                             int x = event.mouseButton.x;
                             int y = event.mouseButton.y;
                             if (selected_piece != nullptr) {
@@ -259,14 +254,17 @@ public:
                                 selected_piece = nullptr;
                             }
                         }
+                        //-------------------------------------------------------------------
                         break;
                     case sf::Event::MouseMoved:
-                        // move the selected piece with the mouse
+                        //-------------------------------------------------------------------
                         if (selected_piece != nullptr) {
                             selected_piece->follow_mouse(window);
                         }
                         break;
+                        //-------------------------------------------------------------------
                 }
+                        
             }
             
             // clear the window
