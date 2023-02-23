@@ -5,6 +5,18 @@
 
 struct Config
 {
+    /*
+    Config struct
+    This struct contains the configuration of the game.
+    Members:
+        b_width: width of the board
+        b_height: height of the board
+        w_width: width of the window
+        w_height: height of the window
+        w_title: title of the window
+        fps: frames per second
+        Vsync: vertical sync
+    */
     int b_width = 400;
     int b_height = 400;
     int w_width = 400;
@@ -36,6 +48,19 @@ private:
         */
         int square_size = static_cast<int>(board.get_height()*x/8 - board.get_height()/50);
         return square_size;
+    }
+
+    int center_in_square(int pixel)
+    {
+        /*
+        This function centers the pieces in the squares.
+        Arguments:
+            pixel: position of the piece
+        */
+        int square_size = static_cast<int>(board.get_height()/8);
+        int square_number = static_cast<int>(pixel/square_size);
+        int center = static_cast<int>(square_number*square_size - square_size/8);
+        return center;
     }
 
     bool piece_is_there(int x, int y, int p_x, int p_y)
@@ -250,7 +275,7 @@ private:
             if (selected_piece != nullptr) 
             {
             //if piece is selected, place it in the square
-            selected_piece->set_position(x, y);
+            selected_piece->set_position(center_in_square(x), center_in_square(y));
             selected_piece = nullptr;
             }
         }
@@ -274,6 +299,12 @@ private:
 
     void handle_events(sf::Event& event, sf::RenderWindow& window)
     {
+        /*
+        This function handles the events of the game.
+        Arguments:
+            event: event of the game
+            window: window where the game is played
+        */
         switch (event.type) 
         {
             case sf::Event::Closed:
@@ -293,7 +324,6 @@ private:
     }
     
 
-                    
 public:
 
     ChessGame()
