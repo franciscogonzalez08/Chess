@@ -10,7 +10,9 @@ Board::Board(int widht = 400, int height = 400)
     }
 
 void Board::draw_board(sf::RenderWindow& window){
-        sf::RectangleShape square(sf::Vector2f(50, 50));
+        int square_widht = static_cast<int>(m_widht/8);
+        int  square_height = static_cast<int>(m_height/8);
+        sf::RectangleShape square(sf::Vector2f(square_widht, square_height));
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 // Alternate between black and white squares
@@ -20,7 +22,7 @@ void Board::draw_board(sf::RenderWindow& window){
                     square.setFillColor(sf::Color::White);
                 }
                 // Squares are 50x50 pixels
-                square.setPosition((col * 50) , (row * 50));
+                square.setPosition((col * square_height) , (row * square_widht));
                 window.draw(square);
                 }
             }
