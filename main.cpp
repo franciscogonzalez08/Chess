@@ -203,6 +203,11 @@ private:
 
     void create_window(sf::RenderWindow& window)
     {
+        /*
+        This function creates the window where the game will be played.
+        Arguments:
+            window: window where the game will be played
+        */
         window.create(sf::VideoMode(game_config.w_width,game_config.w_height),game_config.w_title);
         window.setVerticalSyncEnabled(game_config.Vsync);
         window.setFramerateLimit(game_config.fps);
@@ -212,6 +217,11 @@ private:
 
     void check_mouse_click_on_piece(sf::Event::MouseButtonEvent mouseButtonEvent)
     {
+        /*
+        This function checks if the mouse click is on a piece.
+        Arguments:
+            mouseButtonEvent: event of the mouse button
+        */
         if(mouseButtonEvent.button == sf::Mouse::Left)
         {
             for(int i{0}; i < 32 ; ++i)
@@ -229,16 +239,37 @@ private:
 
     void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent)
     {
+        /*
+        This function checks if the mouse button is released.
+        Arguments:
+            mouseButtonEvent: event of the mouse button
+        */
         if (mouseButtonEvent.button == sf::Mouse::Left) {
             int x {mouseButtonEvent.x};
             int y {mouseButtonEvent.y};
             if (selected_piece != nullptr) 
             {
+            //if piece is selected, place it in the square
             selected_piece->set_position(x, y);
             selected_piece = nullptr;
             }
         }
                         
+    }
+
+    void check_moved_mouse(sf::Event::MouseButtonEvent mouseButtonEvent, sf::RenderWindow& window)
+    {
+        /*
+        This function checks if the mouse is moved.
+        Arguments:
+            mouseButtonEvent: event of the mouse button
+            window: window where the game is played
+        */
+        if (selected_piece != nullptr) 
+        {
+        //if piece is selected, follow the mouse
+        selected_piece->follow_mouse(window);
+        }
     }
 
                     
@@ -269,12 +300,8 @@ public:
                         check_mouse_button_released(event.mouseButton);
                         break;
                     case sf::Event::MouseMoved:
-                        //-------------------------------------------------------------------
-                        if (selected_piece != nullptr) {
-                            selected_piece->follow_mouse(window);
-                        }
+                        check_moved_mouse(event.mouseButton, window);
                         break;
-                        //-------------------------------------------------------------------
                 }
                         
             }
