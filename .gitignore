@@ -1,4 +1,4 @@
 *.o
-*.sh
+*app
 *app*
 images
