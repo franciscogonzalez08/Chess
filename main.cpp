@@ -2,6 +2,7 @@
 #include <cassert>
 #include "Piece.h"
 #include "Board.h"
+#include<iostream>
 
 struct Config
 {
@@ -38,7 +39,7 @@ private:
     Piece *selected_piece = nullptr;
     Config game_config;    
 
-    int transform_pixeles_squares(int x)
+    int give_pixel_position_of_square(int x)
     {
         /*
         This function transforms the position of the squares
@@ -48,6 +49,14 @@ private:
         */
         int square_size = static_cast<int>(board.get_height()*x/8 - board.get_height()/50);
         return square_size;
+    }
+
+    int from_pixel_to_square(int x)
+    {
+        //Given pixel in x or y direction return the square where that pixel is.
+        int square_number = static_cast<int>(x/50);
+        std::cout<<square_number<<std::endl;
+        return square_number;
     }
 
     int center_in_square(int pixel)
@@ -91,16 +100,16 @@ private:
         */
         for (int i = 0; i < 8; i++)
         {
-            int y_cordinate = transform_pixeles_squares(1);
-            int x_cordinate = transform_pixeles_squares(i);
+            int y_cordinate = give_pixel_position_of_square(1);
+            int x_cordinate = give_pixel_position_of_square(i);
             pieces[i] = Piece(x_cordinate, y_cordinate, "pawn","black","images");
             pieces[i].draw_piece(window);
         }
 
         for (int i = 8; i < 16; i++)
         {
-            int y_cordinate = transform_pixeles_squares(6);
-            int x_cordinate = transform_pixeles_squares(i - 8);
+            int y_cordinate = give_pixel_position_of_square(6);
+            int x_cordinate = give_pixel_position_of_square(i - 8);
             pieces[i] = Piece(x_cordinate, y_cordinate, "pawn","white","images");
             pieces[i].draw_piece(window);
         }
@@ -114,15 +123,15 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(0);
-        int y_cordinate = transform_pixeles_squares(7);
+        int x_cordinate = give_pixel_position_of_square(0);
+        int y_cordinate = give_pixel_position_of_square(7);
         pieces[16] = Piece(x_cordinate, y_cordinate, "rook","white","images");
-        x_cordinate = transform_pixeles_squares(7);
+        x_cordinate = give_pixel_position_of_square(7);
         pieces[17] = Piece(x_cordinate, y_cordinate, "rook","white","images");
-        x_cordinate = transform_pixeles_squares(0);
-        y_cordinate = transform_pixeles_squares(0);
+        x_cordinate = give_pixel_position_of_square(0);
+        y_cordinate = give_pixel_position_of_square(0);
         pieces[18] = Piece(x_cordinate, y_cordinate, "rook","black","images");
-        x_cordinate = transform_pixeles_squares(7);
+        x_cordinate = give_pixel_position_of_square(7);
         pieces[19] = Piece(x_cordinate, y_cordinate, "rook","black","images");
         pieces[18].draw_piece(window);
         pieces[19].draw_piece(window);
@@ -138,11 +147,11 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(4);
-        int y_cordinate = transform_pixeles_squares(0);
+        int x_cordinate = give_pixel_position_of_square(4);
+        int y_cordinate = give_pixel_position_of_square(0);
         pieces[20] = Piece(x_cordinate, y_cordinate, "king","black","images");
-        x_cordinate = transform_pixeles_squares(4);
-        y_cordinate = transform_pixeles_squares(7);
+        x_cordinate = give_pixel_position_of_square(4);
+        y_cordinate = give_pixel_position_of_square(7);
         pieces[21] = Piece(x_cordinate, y_cordinate, "king","white","images");
         pieces[20].draw_piece(window);
         pieces[21].draw_piece(window);
@@ -155,11 +164,11 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(3);
-        int y_cordinate = transform_pixeles_squares(0);
+        int x_cordinate = give_pixel_position_of_square(3);
+        int y_cordinate = give_pixel_position_of_square(0);
         pieces[22] = Piece(x_cordinate, y_cordinate, "queen","black","images");
-        x_cordinate = transform_pixeles_squares(3);
-        y_cordinate = transform_pixeles_squares(7);
+        x_cordinate = give_pixel_position_of_square(3);
+        y_cordinate = give_pixel_position_of_square(7);
         pieces[23] = Piece(x_cordinate, y_cordinate, "queen","white","images");
         pieces[22].draw_piece(window);
         pieces[23].draw_piece(window);
@@ -172,15 +181,15 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(1);
-        int y_cordinate = transform_pixeles_squares(0);
+        int x_cordinate = give_pixel_position_of_square(1);
+        int y_cordinate = give_pixel_position_of_square(0);
         pieces[24] = Piece(x_cordinate, y_cordinate, "knight","black","images");
-        x_cordinate = transform_pixeles_squares(6);
+        x_cordinate = give_pixel_position_of_square(6);
         pieces[25] = Piece(x_cordinate, y_cordinate, "knight","black","images");
-        x_cordinate = transform_pixeles_squares(1);
-        y_cordinate = transform_pixeles_squares(7);
+        x_cordinate = give_pixel_position_of_square(1);
+        y_cordinate = give_pixel_position_of_square(7);
         pieces[26] = Piece(x_cordinate, y_cordinate, "knight","white","images");
-        x_cordinate = transform_pixeles_squares(6);
+        x_cordinate = give_pixel_position_of_square(6);
         pieces[27] = Piece(x_cordinate, y_cordinate, "knight","white","images");
         pieces[24].draw_piece(window);
         pieces[25].draw_piece(window);
@@ -195,15 +204,15 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(2);
-        int y_cordinate = transform_pixeles_squares(0);
+        int x_cordinate = give_pixel_position_of_square(2);
+        int y_cordinate = give_pixel_position_of_square(0);
         pieces[28] = Piece(x_cordinate, y_cordinate, "bishop","black","images");
-        x_cordinate = transform_pixeles_squares(5);
+        x_cordinate = give_pixel_position_of_square(5);
         pieces[29] = Piece(x_cordinate, y_cordinate, "bishop","black","images");
-        x_cordinate = transform_pixeles_squares(2);
-        y_cordinate = transform_pixeles_squares(7);
+        x_cordinate = give_pixel_position_of_square(2);
+        y_cordinate = give_pixel_position_of_square(7);
         pieces[30] = Piece(x_cordinate, y_cordinate, "bishop","white","images");
-        x_cordinate = transform_pixeles_squares(5);
+        x_cordinate = give_pixel_position_of_square(5);
         pieces[31] = Piece(x_cordinate, y_cordinate, "bishop","white","images");
         pieces[28].draw_piece(window);
         pieces[29].draw_piece(window);
@@ -276,6 +285,7 @@ private:
             {
             //if piece is selected, place it in the square
             selected_piece->set_position(center_in_square(x), center_in_square(y));
+            check_if_piece_is_there(x,y);
             selected_piece = nullptr;
             }
         }
@@ -322,7 +332,28 @@ private:
         }
                         
     }
-    
+
+    void check_if_piece_is_there(int x, int y)
+    {
+        int square_x = from_pixel_to_square(x);
+        int square_y = from_pixel_to_square(y);
+        for(int i{0}; i < 32; ++i)
+        {
+            //Here we check if the piece is the same as the piece we are moving
+            if(&pieces[i]!=selected_piece)
+            {
+                int piece_square_x = from_pixel_to_square(pieces[i].get_x_position());
+                int piece_square_y = from_pixel_to_square(pieces[i].get_y_position());
+                //If piece we are moving goes into another piece, then eat.
+                if(piece_square_x == square_x && piece_square_y == square_y)
+                {
+                    std::cout<<"removing"<<std::endl;
+                    pieces[i].set_position(0,0);
+                }
+
+            }
+        }
+    }
 
 public:
 
