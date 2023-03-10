@@ -22,11 +22,11 @@ private:
     std::string m_name;
     std::string m_color;
     std::string m_images_path;
-
     std::string map_name();
 
 public:
     Piece();
+    bool alive;
 
     Piece(
         int x, 

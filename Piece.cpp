@@ -1,5 +1,5 @@
 #include "Piece.h"
-Piece::Piece(): x_position {0}, y_position {0}, m_name {"pawn"}, m_color {"white"}, m_images_path {"images"} {}
+Piece::Piece(): x_position {0}, y_position {0}, m_name {"pawn"}, m_color {"white"}, m_images_path {"images"}, alive {true} {}
 
 
 Piece::Piece(
@@ -10,7 +10,7 @@ Piece::Piece(
     std::string images_path = "images"
     ):  x_position {x}, y_position {y}, 
         m_name {name}, m_color {color},
-        m_images_path {images_path}
+        m_images_path {images_path}, alive {true}
 {
 
 }
@@ -68,3 +68,4 @@ std::string Piece::get_name() const
 {
     return m_name;
 }
+

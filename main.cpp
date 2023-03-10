@@ -283,8 +283,6 @@ private:
         if (mouseButtonEvent.button == sf::Mouse::Left) {
             int x {mouseButtonEvent.x};
             int y {mouseButtonEvent.y};
-            std::cout << "x: " << x << " y: " << y << std::endl;
-            std::cout << " centered x: " << center_in_square(x) << " centered y: " << center_in_square(y) << std::endl;
             if (selected_piece != nullptr) 
             {
             //if piece is selected, place it in the square
@@ -340,12 +338,6 @@ private:
     {
         int square_x = from_pixel_to_square(x);
         int square_y = from_pixel_to_square(y);
-        std::cout << "-------------------------------------" << std::endl;
-        std::cout << "Mouse cords : " << square_x << " " << square_y << std::endl;
-        std::cout << "Moved piece : " << selected_piece->get_name() << std::endl;
-        std::cout << "New cords : " << selected_piece->get_x_position() << " " << selected_piece->get_y_position() << std::endl;
-        std::cout << "New square cords : " << from_pixel_to_square(selected_piece->get_x_position()) << " " << from_pixel_to_square(selected_piece->get_y_position()) << std::endl;
-        std::cout << "-------------------------------------" << std::endl;
         for(int i{0}; i < number_of_pieces; ++i)
         {
             //Here we check if the piece is the same as the piece we are moving
