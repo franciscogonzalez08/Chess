@@ -83,7 +83,8 @@ private:
             p_x: x position of the piece
             p_y: y position of the piece
         */
-        if (x >= p_x && x <= p_x + 50 && y >= p_y && y <= p_y + 50)
+        int square_size = static_cast<int>(board.get_height()/8);
+        if (x >= p_x && x <= p_x + square_size && y >= p_y && y <= p_y + square_size)
         {
             return true;
         }
