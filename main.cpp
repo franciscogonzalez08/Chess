@@ -289,7 +289,7 @@ private:
             {
             //if piece is selected, place it in the square
             selected_piece->set_position(center_in_square(x), center_in_square(y));
-            check_if_piece_is_there(x,y);
+            bool status  = check_if_piece_is_there(x,y);
             selected_piece = nullptr;
             }
         }
@@ -336,7 +336,7 @@ private:
         }          
     }
 
-    void check_if_piece_is_there(int x, int y)
+    bool check_if_piece_is_there(int x, int y)
     {
         int square_x = from_pixel_to_square(x);
         int square_y = from_pixel_to_square(y);
@@ -350,11 +350,16 @@ private:
                 //If piece we are moving goes into another piece, then eat.
                 if(piece_square_x == square_x && piece_square_y == square_y)
                 {
-                    pieces[i].alive = false;
+                   if (pieces[i].get_color() != selected_piece->get_color())
+                   {
+                        pieces[i].alive = false;
+                        return true;
+                   } 
                 }
 
             }
         }
+        return false;
     }
 
 public:
