@@ -55,7 +55,7 @@ private:
     int from_pixel_to_square(int x)
     {
         //Given pixel in x or y direction return the square where that pixel is.
-        int square_number = static_cast<int>(x * board.get_height() / 8);
+        int square_number = static_cast<int>(x * 8/board.get_height());
         return square_number;
     }
 
@@ -382,7 +382,7 @@ public:
             // draw the board and the pieces
             board.draw_board(window);
             for (int i = 0; i < number_of_pieces; i++) {
-                pieces[i].draw_piece(window,board.get_height());
+                pieces[i].draw_piece(window, board.get_height());
             }
             
             // display the window
@@ -396,7 +396,7 @@ public:
 int main() {
     
     ChessGame game;
-    game.run(); 
+    game.run();
 
     return 0;
 }
