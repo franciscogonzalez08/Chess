@@ -32,7 +32,9 @@ void Piece::draw_piece(sf::RenderWindow& window, int height)
     int square_number_y = static_cast<int>(y_position/square_size);
     int center_x = square_number_x*square_size - square_size/8 ;
     int center_y = square_number_y*square_size - square_size/8;
+    int scaling_factor = static_cast<int>(height/400);
     sf::Sprite pieceSprite(pieceTexture);
+    pieceSprite.setScale(sf::Vector2f(scaling_factor, scaling_factor));
     pieceSprite.setPosition(sf::Vector2f(center_x, center_y));
     window.draw(pieceSprite);
     }
