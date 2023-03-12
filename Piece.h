@@ -42,6 +42,7 @@ public:
     int get_x_position() const;
     int get_y_position() const;
     std::string get_name() const;
+    std::string get_color() const;
 };
 
 #endif

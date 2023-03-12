@@ -87,3 +87,7 @@ std::string Piece::get_name() const
     return m_name;
 }
 
+std::string Piece::get_color() const
+{
+    return m_color;
+}
