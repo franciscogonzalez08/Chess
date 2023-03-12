@@ -104,7 +104,7 @@ private:
             int y_cordinate = center_in_square(give_pixel_position_of_square(1));
             int x_cordinate = center_in_square(give_pixel_position_of_square(i));
             pieces[i] = Piece(x_cordinate, y_cordinate, name, "black","images");
-            pieces[i].draw_piece(window);
+            pieces[i].draw_piece(window, board.get_height());
         }
 
         for (int i = 8; i < 16; i++)
@@ -113,7 +113,7 @@ private:
             int y_cordinate = center_in_square(give_pixel_position_of_square(6));
             int x_cordinate = center_in_square(give_pixel_position_of_square(i - 8));
             pieces[i] = Piece(x_cordinate, y_cordinate, name,"white","images");
-            pieces[i].draw_piece(window);
+            pieces[i].draw_piece(window,board.get_height());
         }
     }
 
@@ -135,10 +135,10 @@ private:
         pieces[18] = Piece(x_cordinate, y_cordinate, "rook 3","black","images");
         x_cordinate = center_in_square(give_pixel_position_of_square(7));
         pieces[19] = Piece(x_cordinate, y_cordinate, "rook 4","black","images");
-        pieces[18].draw_piece(window);
-        pieces[19].draw_piece(window);
-        pieces[16].draw_piece(window);
-        pieces[17].draw_piece(window);
+        pieces[18].draw_piece(window,board.get_height());
+        pieces[19].draw_piece(window,board.get_height());
+        pieces[16].draw_piece(window,board.get_height());
+        pieces[17].draw_piece(window,board.get_height());
 
     }
 
@@ -155,8 +155,8 @@ private:
         x_cordinate = center_in_square(give_pixel_position_of_square(4));
         y_cordinate = center_in_square(give_pixel_position_of_square(7));
         pieces[21] = Piece(x_cordinate, y_cordinate, "king 1","white","images");
-        pieces[20].draw_piece(window);
-        pieces[21].draw_piece(window);
+        pieces[20].draw_piece(window,board.get_height());
+        pieces[21].draw_piece(window,board.get_height());
     }
 
     void place_queens(sf::RenderWindow& window)
@@ -172,8 +172,8 @@ private:
         x_cordinate = center_in_square(give_pixel_position_of_square(3));
         y_cordinate = center_in_square(give_pixel_position_of_square(7));
         pieces[23] = Piece(x_cordinate, y_cordinate, "queen 1","white","images");
-        pieces[22].draw_piece(window);
-        pieces[23].draw_piece(window);
+        pieces[22].draw_piece(window,board.get_height());
+        pieces[23].draw_piece(window,board.get_height());
     }
 
     void place_knights(sf::RenderWindow& window)
@@ -193,10 +193,10 @@ private:
         pieces[26] = Piece(x_cordinate, y_cordinate, "knight 1","white","images");
         x_cordinate = center_in_square(give_pixel_position_of_square(6));
         pieces[27] = Piece(x_cordinate, y_cordinate, "knight 2","white","images");
-        pieces[24].draw_piece(window);
-        pieces[25].draw_piece(window);
-        pieces[26].draw_piece(window);
-        pieces[27].draw_piece(window);
+        pieces[24].draw_piece(window,board.get_height());
+        pieces[25].draw_piece(window,board.get_height());
+        pieces[26].draw_piece(window,board.get_height());
+        pieces[27].draw_piece(window,board.get_height());
     }
     
     void place_bishops(sf::RenderWindow& window)
@@ -216,10 +216,10 @@ private:
         pieces[30] = Piece(x_cordinate, y_cordinate, "bishop 1","white","images");
         x_cordinate = center_in_square(give_pixel_position_of_square(5));
         pieces[31] = Piece(x_cordinate, y_cordinate, "bishop 2","white","images");
-        pieces[28].draw_piece(window);
-        pieces[29].draw_piece(window);
-        pieces[30].draw_piece(window);
-        pieces[31].draw_piece(window);
+        pieces[28].draw_piece(window,board.get_height());
+        pieces[29].draw_piece(window,board.get_height());
+        pieces[30].draw_piece(window,board.get_height());
+        pieces[31].draw_piece(window,board.get_height());
     }
 
     void place_pieces_start(sf::RenderWindow& window)
@@ -382,7 +382,7 @@ public:
             // draw the board and the pieces
             board.draw_board(window);
             for (int i = 0; i < number_of_pieces; i++) {
-                pieces[i].draw_piece(window);
+                pieces[i].draw_piece(window,board.get_height());
             }
             
             // display the window
@@ -396,7 +396,7 @@ public:
 int main() {
     
     ChessGame game;
-    game.run();
+    game.run(); 
 
     return 0;
 }

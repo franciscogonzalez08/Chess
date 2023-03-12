@@ -36,7 +36,7 @@ public:
         std::string images_path
         );
 
-    void draw_piece(sf::RenderWindow& window);
+    void draw_piece(sf::RenderWindow& window, int height);
     void follow_mouse(sf::RenderWindow& window);
     void set_position(int x, int y);
     int get_x_position() const;

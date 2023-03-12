@@ -15,7 +15,7 @@ Piece::Piece(
 
 }
 
-void Piece::draw_piece(sf::RenderWindow& window)
+void Piece::draw_piece(sf::RenderWindow& window, int height)
 {
     sf::Texture pieceTexture;
     if (!pieceTexture.loadFromFile(map_name()))
@@ -24,16 +24,21 @@ void Piece::draw_piece(sf::RenderWindow& window)
     }
     if (alive)
     {
+    // Suppose the height of the window is 800 pixels
+    // Square size is 100 pixels
+    // 
+    int square_size = static_cast<int>(height/8);
+    int square_number_x = static_cast<int>(x_position/square_size);
+    int square_number_y = static_cast<int>(y_position/square_size);
+    int center_x = square_number_x*square_size - square_size/8 ;
+    int center_y = square_number_y*square_size - square_size/8;
     sf::Sprite pieceSprite(pieceTexture);
-    pieceSprite.setPosition(sf::Vector2f(x_position, y_position));
+    pieceSprite.setPosition(sf::Vector2f(center_x, center_y));
     window.draw(pieceSprite);
     }
     else
     {
-    sf::Sprite pieceSprite;
-    pieceSprite.setColor(sf::Color(0, 0, 0, 0));
-    pieceSprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
-    pieceSprite.setPosition(sf::Vector2f(x_position, y_position));
+        //do nothing
     }
 
 }
