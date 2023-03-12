@@ -55,7 +55,7 @@ private:
     int from_pixel_to_square(int x)
     {
         //Given pixel in x or y direction return the square where that pixel is.
-        int square_number = static_cast<int>(x * 1/50);
+        int square_number = static_cast<int>(x * board.get_height() / 8);
         return square_number;
     }
 
