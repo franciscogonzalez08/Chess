@@ -17,7 +17,7 @@ void Board::draw_board(sf::RenderWindow& window){
             for (int col = 0; col < 8; col++) {
                 // Alternate between black and white squares
                 if ((row + col) % 2 == 0) {
-                    square.setFillColor(sf::Color::Black);
+                    square.setFillColor(sf::Color(165, 42, 42));
                 } else {
                     square.setFillColor(sf::Color::White);
                 }
