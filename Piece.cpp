@@ -22,9 +22,20 @@ void Piece::draw_piece(sf::RenderWindow& window)
     {
         //add error handling
     }
+    if (alive)
+    {
     sf::Sprite pieceSprite(pieceTexture);
     pieceSprite.setPosition(sf::Vector2f(x_position, y_position));
     window.draw(pieceSprite);
+    }
+    else
+    {
+    sf::Sprite pieceSprite;
+    pieceSprite.setColor(sf::Color(0, 0, 0, 0));
+    pieceSprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
+    pieceSprite.setPosition(sf::Vector2f(x_position, y_position));
+    }
+
 }
 
 std::string Piece::map_name()

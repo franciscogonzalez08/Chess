@@ -264,7 +264,8 @@ private:
             {
                 int pxp {pieces[i].get_x_position()};
                 int pyp {pieces[i].get_y_position()};
-                if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp))
+                bool alive_status {pieces[i].alive};
+                if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp) && alive_status)
                 {
                     selected_piece = &pieces[i];
                     break;
@@ -325,11 +326,11 @@ private:
             case sf::Event::MouseButtonPressed:
                 check_mouse_click_on_piece(event.mouseButton);                        
                 break;
-            case sf::Event::MouseButtonReleased:
-                check_mouse_button_released(event.mouseButton);
-                break;
             case sf::Event::MouseMoved:
                 check_moved_mouse(event.mouseButton, window);
+                break;
+            case sf::Event::MouseButtonReleased:
+                check_mouse_button_released(event.mouseButton);
                 break;
         }          
     }
@@ -348,7 +349,7 @@ private:
                 //If piece we are moving goes into another piece, then eat.
                 if(piece_square_x == square_x && piece_square_y == square_y)
                 {
-                    pieces[i].set_position(0,0);
+                    pieces[i].alive = false;
                 }
 
             }
@@ -390,14 +391,6 @@ public:
         }
     }
 };
-
-
-
-
-
-
-
-
 
 
 int main() {
