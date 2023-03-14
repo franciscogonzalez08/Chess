@@ -39,6 +39,8 @@ private:
         };
     Piece *selected_piece = nullptr;
     Config game_config;    
+    //Maybe not elegant 
+    std::pair <int,int> selected_piece_position {-1,-1};
 
     int give_pixel_position_of_square(int x)
     {
@@ -269,13 +271,14 @@ private:
                 if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp) && alive_status)
                 {
                     selected_piece = &pieces[i];
-                    break;
+                    selected_piece_position.first = pxp;
+                    selected_piece_position.second = pyp;
                 }
             }
         }
     }
 
-    void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent)
+        void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent)
     {
         /*
         This function checks if the mouse button is released.
@@ -288,7 +291,9 @@ private:
             if (selected_piece != nullptr) 
             {
             //if piece is selected, place it in the square
-            selected_piece->set_position(center_in_square(x), center_in_square(y));
+            int center_x {center_in_square(x)};
+            int center_y {center_in_square(y)};
+            selected_piece->set_position(center_x, center_y);
             bool status  = check_if_piece_is_there(x,y);
             selected_piece = nullptr;
             }
@@ -310,6 +315,13 @@ private:
         selected_piece->follow_mouse(window);
         }
     }
+
+    void return_to_orginal_position()
+    {
+        selected_piece->set_position(selected_piece_position.first, selected_piece_position.second);
+    }
+
+
 
     void handle_events(sf::Event& event, sf::RenderWindow& window)
     {
@@ -354,9 +366,13 @@ private:
                    {
                         pieces[i].alive = false;
                         return true;
-                   } 
+                   }
+                    else
+                    {
+                        return_to_orginal_position();
+                        return false;
+                    } 
                 }
-
             }
         }
         return false;
