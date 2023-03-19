@@ -35,4 +35,3 @@ int Board::get_height()
 {
     return m_height;
 }
-

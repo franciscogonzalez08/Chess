@@ -2,6 +2,7 @@
 #include <cassert>
 #include "Piece.h"
 #include "Board.h"
+#include "Validator.h"
 #include<iostream>
 
 struct Config
@@ -321,8 +322,6 @@ private:
         selected_piece->set_position(selected_piece_position.first, selected_piece_position.second);
     }
 
-
-
     void handle_events(sf::Event& event, sf::RenderWindow& window)
     {
         /*
@@ -337,7 +336,7 @@ private:
                 window.close();
                 break;
             case sf::Event::MouseButtonPressed:
-                check_mouse_click_on_piece(event.mouseButton);                        
+                check_mouse_click_on_piece(event.mouseButton);
                 break;
             case sf::Event::MouseMoved:
                 check_moved_mouse(event.mouseButton, window);
@@ -378,6 +377,20 @@ private:
         return false;
     }
 
+    void show_selected_piece(sf::RenderWindow& window, Validator& validator)
+    {
+        if (selected_piece != nullptr) 
+        {
+            validator.show_possible_movements(
+                window,selected_piece->get_name(),
+                selected_piece->get_color(),
+                center_in_square(selected_piece->get_x_position()),
+                center_in_square(selected_piece->get_y_position())
+            );
+        }
+    }
+
+
 public:
 
     ChessGame()
@@ -388,23 +401,27 @@ public:
         sf::RenderWindow window;
         create_window(window);
         place_pieces_start(window);
+        Validator validator(board.get_height(), board.get_widht());
 
         // main event loop
         while (window.isOpen()) {
             sf::Event event;
-            
-            while (window.pollEvent(event)) 
-            {
-                handle_events(event, window);
-            }
-            
+        
             // clear the window
             window.clear(sf::Color::White);
             
             // draw the board and the pieces
             board.draw_board(window);
+
+            show_selected_piece(window, validator);
+            
             for (int i = 0; i < number_of_pieces; i++) {
                 pieces[i].draw_piece(window, board.get_height());
+            }
+
+            while (window.pollEvent(event)) 
+            {
+                handle_events(event, window);
             }
             
             // display the window
