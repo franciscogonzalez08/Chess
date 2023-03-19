@@ -6,6 +6,14 @@
 #ifndef VALIDATOR_H
 #define VALIDATOR_H
 
+/*
+* Validator class
+* This class is responsible for validating the movements of the pieces.
+* Arguments:
+*   x: x position of the piece
+*   y: y position of the piece
+*/
+
 class Validator
 {
 private:
