@@ -86,6 +86,14 @@ std::vector <std::pair<int,int>> Validator::king_movements(int x, int y, std::st
 
 std::vector <std::pair<int,int>> Validator::bishop_movements(int x, int y, std::string color)
 {
+    
+    /*
+    This function returns a vector with the possible movements of a bishop.
+    Arguments:
+        x: x position of the bishop
+        y: y position of the bishop
+        color: color of the bishop
+    */
     std::vector <std::pair<int,int>> possible_movements;
     possible_movements.push_back({x,y});
     int x_movement, y_movement;
@@ -111,13 +119,26 @@ std::vector <std::pair<int,int>> Validator::bishop_movements(int x, int y, std::
     return check_movements(possible_movements);
 }
 
-/*
+
 std::vector <std::pair<int,int>> Validator::queen_movements(int x, int y, std::string color)
 {
-    std::vector <std::pair<int,int>> possible_movements;
+    /*
+    This function returns a vector with the possible movements of a queen.
+    Arguments:
+        x: x position of the queen
+        y: y position of the queen
+        color: color of the queen
+    */
+    std::vector <std::pair<int,int>> possible_movements, bishop_movements, rook_movements;
     possible_movements.push_back({x,y});
-    int x_movement, y_movement;
+    bishop_movements = this->bishop_movements(x,y,color);
+    rook_movements = this->rook_movements(x,y,color);
+    possible_movements.insert(possible_movements.end(), bishop_movements.begin(), bishop_movements.end());
+    possible_movements.insert(possible_movements.end(), rook_movements.begin(), rook_movements.end());
+    return check_movements(possible_movements);
 }
+
+/*
 std::vector <std::pair<int,int>> Validator::knight_movements(int x, int y, std::string color)
 {
     std::vector <std::pair<int,int>> possible_movements;
@@ -234,20 +255,20 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
         }
     }
 
-    /*
-    else if (new_name == "knight")
+
+    else if (new_name == "queen")
     {
-        possible_movements = knight_movements(x,y,piece_color);
+        possible_movements = queen_movements(x,y,piece_color);
         for (std::pair<int,int> movement : possible_movements)
         {
             draw_square(window, movement.first, movement.second);
         }
     }
 
-
-    else if (new_name == "queen")
+    /*
+    else if (new_name == "knight")
     {
-        possible_movements = queen_movements(x,y,piece_color);
+        possible_movements = knight_movements(x,y,piece_color);
         for (std::pair<int,int> movement : possible_movements)
         {
             draw_square(window, movement.first, movement.second);

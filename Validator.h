@@ -26,7 +26,7 @@ public:
     Validator(int x, int y);
     void draw_square(sf::RenderWindow& window, int x, int y);
     std::vector <std::pair<int,int>> pawn_movements(int x, int y, std::string color);
-    //std::vector <std::pair<int,int>> queen_movements(int x, int y, std::string color);
+    std::vector <std::pair<int,int>> queen_movements(int x, int y, std::string color);
     std::vector <std::pair<int,int>> king_movements(int x, int y, std::string color);
     std::vector <std::pair<int,int>> bishop_movements(int x, int y, std::string color);
     //std::vector <std::pair<int,int>> knight_movements(int x, int y, std::string color);
