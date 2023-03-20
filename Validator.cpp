@@ -84,14 +84,35 @@ std::vector <std::pair<int,int>> Validator::king_movements(int x, int y, std::st
     return check_movements(possible_movements);
 }
 
-/*
-std::vector <std::pair<int,int>> Validator::queen_movements(int x, int y, std::string color)
+std::vector <std::pair<int,int>> Validator::bishop_movements(int x, int y, std::string color)
 {
     std::vector <std::pair<int,int>> possible_movements;
     possible_movements.push_back({x,y});
     int x_movement, y_movement;
+    for (int i{0}; i<8; ++i)
+    {
+        x_movement = x + (i - 8) * static_cast<int>(board_dims.first/8);
+        y_movement = y + (i - 8) * static_cast<int>(board_dims.first/8);
+        std::pair <int,int> movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        x_movement = x + i * static_cast<int>(board_dims.first/8);
+        y_movement = y + i * static_cast<int>(board_dims.first/8);
+        movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        x_movement = x - i  * static_cast<int>(board_dims.first/8);
+        y_movement = y + i * static_cast<int>(board_dims.first/8);
+        movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        x_movement = x + i * static_cast<int>(board_dims.first/8);
+        y_movement = y - i * static_cast<int>(board_dims.first/8);
+        movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+    }
+    return check_movements(possible_movements);
 }
-std::vector <std::pair<int,int>> Validator::bishop_movements(int x, int y, std::string color)
+
+/*
+std::vector <std::pair<int,int>> Validator::queen_movements(int x, int y, std::string color)
 {
     std::vector <std::pair<int,int>> possible_movements;
     possible_movements.push_back({x,y});
@@ -204,6 +225,15 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
         }
     }
 
+    else if (new_name == "bishop")
+    {
+        possible_movements = bishop_movements(x,y,piece_color);
+        for (std::pair<int,int> movement : possible_movements)
+        {
+            draw_square(window, movement.first, movement.second);
+        }
+    }
+
     /*
     else if (new_name == "knight")
     {
@@ -214,15 +244,6 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
         }
     }
 
-    
-    else if (new_name == "bishop")
-    {
-        possible_movements = bishop_movements(x,y,piece_color);
-        for (std::pair<int,int> movement : possible_movements)
-        {
-            draw_square(window, movement.first, movement.second);
-        }
-    }
 
     else if (new_name == "queen")
     {
