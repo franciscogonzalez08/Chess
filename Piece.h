@@ -18,15 +18,15 @@
 class Piece
 {
 private:
-    int x_postion, y_postion;
+    int x_position, y_position;
     std::string m_name;
     std::string m_color;
     std::string m_images_path;
-
     std::string map_name();
 
 public:
     Piece();
+    bool alive;
 
     Piece(
         int x, 
@@ -36,11 +36,13 @@ public:
         std::string images_path
         );
 
-    void draw_piece(sf::RenderWindow& window);
+    void draw_piece(sf::RenderWindow& window, int height);
     void follow_mouse(sf::RenderWindow& window);
     void set_position(int x, int y);
     int get_x_position() const;
     int get_y_position() const;
+    std::string get_name() const;
+    std::string get_color() const;
 };
 
 #endif

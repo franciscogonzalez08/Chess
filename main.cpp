@@ -2,6 +2,8 @@
 #include <cassert>
 #include "Piece.h"
 #include "Board.h"
+#include "Validator.h"
+#include<iostream>
 
 struct Config
 {
@@ -29,16 +31,19 @@ struct Config
 class ChessGame {
 private:
     Board board;
-    //Chess has 32 pieces.
-    Piece pieces[32];
+    //Chess has 32 pieces
+    int number_of_pieces = 32;
+    Piece* pieces = new Piece[number_of_pieces];
     std::string chess_pieces[6] = {
         "king", "queen", "bishiop", 
         "knight", "rook", "pawn"
         };
     Piece *selected_piece = nullptr;
     Config game_config;    
+    //Maybe not elegant 
+    std::pair <int,int> selected_piece_position {-1,-1};
 
-    int transform_pixeles_squares(int x)
+    int give_pixel_position_of_square(int x)
     {
         /*
         This function transforms the position of the squares
@@ -46,8 +51,15 @@ private:
         Arguments:
             x: position of the square
         */
-        int square_size = static_cast<int>(board.get_height()*x/8 - board.get_height()/50);
+        int square_size = static_cast<int>(board.get_height()*x/8);
         return square_size;
+    }
+
+    int from_pixel_to_square(int x)
+    {
+        //Given pixel in x or y direction return the square where that pixel is.
+        int square_number = static_cast<int>(x * 8/board.get_height());
+        return square_number;
     }
 
     int center_in_square(int pixel)
@@ -59,7 +71,7 @@ private:
         */
         int square_size = static_cast<int>(board.get_height()/8);
         int square_number = static_cast<int>(pixel/square_size);
-        int center = static_cast<int>(square_number*square_size - square_size/8);
+        int center = static_cast<int>(square_number*square_size);
         return center;
     }
 
@@ -74,7 +86,8 @@ private:
             p_x: x position of the piece
             p_y: y position of the piece
         */
-        if (x >= p_x && x <= p_x + 50 && y >= p_y && y <= p_y + 50)
+        int square_size = static_cast<int>(board.get_height()/8);
+        if (x >= p_x && x <= p_x + square_size && y >= p_y && y <= p_y + square_size)
         {
             return true;
         }
@@ -91,18 +104,20 @@ private:
         */
         for (int i = 0; i < 8; i++)
         {
-            int y_cordinate = transform_pixeles_squares(1);
-            int x_cordinate = transform_pixeles_squares(i);
-            pieces[i] = Piece(x_cordinate, y_cordinate, "pawn","black","images");
-            pieces[i].draw_piece(window);
+            std::string name {"pawn " + std::to_string(i + 1)};
+            int y_cordinate = center_in_square(give_pixel_position_of_square(1));
+            int x_cordinate = center_in_square(give_pixel_position_of_square(i));
+            pieces[i] = Piece(x_cordinate, y_cordinate, name, "black","images");
+            pieces[i].draw_piece(window, board.get_height());
         }
 
         for (int i = 8; i < 16; i++)
         {
-            int y_cordinate = transform_pixeles_squares(6);
-            int x_cordinate = transform_pixeles_squares(i - 8);
-            pieces[i] = Piece(x_cordinate, y_cordinate, "pawn","white","images");
-            pieces[i].draw_piece(window);
+            std::string name {"pawn " + std::to_string(i - 7)};
+            int y_cordinate = center_in_square(give_pixel_position_of_square(6));
+            int x_cordinate = center_in_square(give_pixel_position_of_square(i - 8));
+            pieces[i] = Piece(x_cordinate, y_cordinate, name,"white","images");
+            pieces[i].draw_piece(window,board.get_height());
         }
     }
 
@@ -114,20 +129,20 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(0);
-        int y_cordinate = transform_pixeles_squares(7);
-        pieces[16] = Piece(x_cordinate, y_cordinate, "rook","white","images");
-        x_cordinate = transform_pixeles_squares(7);
-        pieces[17] = Piece(x_cordinate, y_cordinate, "rook","white","images");
-        x_cordinate = transform_pixeles_squares(0);
-        y_cordinate = transform_pixeles_squares(0);
-        pieces[18] = Piece(x_cordinate, y_cordinate, "rook","black","images");
-        x_cordinate = transform_pixeles_squares(7);
-        pieces[19] = Piece(x_cordinate, y_cordinate, "rook","black","images");
-        pieces[18].draw_piece(window);
-        pieces[19].draw_piece(window);
-        pieces[16].draw_piece(window);
-        pieces[17].draw_piece(window);
+        int x_cordinate = center_in_square(give_pixel_position_of_square(0));
+        int y_cordinate = center_in_square(give_pixel_position_of_square(7));
+        pieces[16] = Piece(x_cordinate, y_cordinate, "rook 1","white","images");
+        x_cordinate = give_pixel_position_of_square(7);
+        pieces[17] = Piece(x_cordinate, y_cordinate, "rook 2","white","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(0));
+        y_cordinate = center_in_square(give_pixel_position_of_square(0));
+        pieces[18] = Piece(x_cordinate, y_cordinate, "rook 3","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(7));
+        pieces[19] = Piece(x_cordinate, y_cordinate, "rook 4","black","images");
+        pieces[18].draw_piece(window,board.get_height());
+        pieces[19].draw_piece(window,board.get_height());
+        pieces[16].draw_piece(window,board.get_height());
+        pieces[17].draw_piece(window,board.get_height());
 
     }
 
@@ -138,14 +153,14 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(4);
-        int y_cordinate = transform_pixeles_squares(0);
-        pieces[20] = Piece(x_cordinate, y_cordinate, "king","black","images");
-        x_cordinate = transform_pixeles_squares(4);
-        y_cordinate = transform_pixeles_squares(7);
-        pieces[21] = Piece(x_cordinate, y_cordinate, "king","white","images");
-        pieces[20].draw_piece(window);
-        pieces[21].draw_piece(window);
+        int x_cordinate = center_in_square(give_pixel_position_of_square(4));
+        int y_cordinate = center_in_square(give_pixel_position_of_square(0));
+        pieces[20] = Piece(x_cordinate, y_cordinate, "king 2","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(4));
+        y_cordinate = center_in_square(give_pixel_position_of_square(7));
+        pieces[21] = Piece(x_cordinate, y_cordinate, "king 1","white","images");
+        pieces[20].draw_piece(window,board.get_height());
+        pieces[21].draw_piece(window,board.get_height());
     }
 
     void place_queens(sf::RenderWindow& window)
@@ -155,14 +170,14 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(3);
-        int y_cordinate = transform_pixeles_squares(0);
-        pieces[22] = Piece(x_cordinate, y_cordinate, "queen","black","images");
-        x_cordinate = transform_pixeles_squares(3);
-        y_cordinate = transform_pixeles_squares(7);
-        pieces[23] = Piece(x_cordinate, y_cordinate, "queen","white","images");
-        pieces[22].draw_piece(window);
-        pieces[23].draw_piece(window);
+        int x_cordinate = center_in_square(give_pixel_position_of_square(3));
+        int y_cordinate = center_in_square(give_pixel_position_of_square(0));
+        pieces[22] = Piece(x_cordinate, y_cordinate, "queen 2","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(3));
+        y_cordinate = center_in_square(give_pixel_position_of_square(7));
+        pieces[23] = Piece(x_cordinate, y_cordinate, "queen 1","white","images");
+        pieces[22].draw_piece(window,board.get_height());
+        pieces[23].draw_piece(window,board.get_height());
     }
 
     void place_knights(sf::RenderWindow& window)
@@ -172,20 +187,20 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(1);
-        int y_cordinate = transform_pixeles_squares(0);
-        pieces[24] = Piece(x_cordinate, y_cordinate, "knight","black","images");
-        x_cordinate = transform_pixeles_squares(6);
-        pieces[25] = Piece(x_cordinate, y_cordinate, "knight","black","images");
-        x_cordinate = transform_pixeles_squares(1);
-        y_cordinate = transform_pixeles_squares(7);
-        pieces[26] = Piece(x_cordinate, y_cordinate, "knight","white","images");
-        x_cordinate = transform_pixeles_squares(6);
-        pieces[27] = Piece(x_cordinate, y_cordinate, "knight","white","images");
-        pieces[24].draw_piece(window);
-        pieces[25].draw_piece(window);
-        pieces[26].draw_piece(window);
-        pieces[27].draw_piece(window);
+        int x_cordinate = center_in_square(give_pixel_position_of_square(1));
+        int y_cordinate = center_in_square(give_pixel_position_of_square(0));
+        pieces[24] = Piece(x_cordinate, y_cordinate, "knight 3","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(6));
+        pieces[25] = Piece(x_cordinate, y_cordinate, "knight 4","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(1));
+        y_cordinate = center_in_square(give_pixel_position_of_square(7));
+        pieces[26] = Piece(x_cordinate, y_cordinate, "knight 1","white","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(6));
+        pieces[27] = Piece(x_cordinate, y_cordinate, "knight 2","white","images");
+        pieces[24].draw_piece(window,board.get_height());
+        pieces[25].draw_piece(window,board.get_height());
+        pieces[26].draw_piece(window,board.get_height());
+        pieces[27].draw_piece(window,board.get_height());
     }
     
     void place_bishops(sf::RenderWindow& window)
@@ -195,20 +210,20 @@ private:
         Arguments:
             window: window where the pieces will be drawn
         */
-        int x_cordinate = transform_pixeles_squares(2);
-        int y_cordinate = transform_pixeles_squares(0);
-        pieces[28] = Piece(x_cordinate, y_cordinate, "bishop","black","images");
-        x_cordinate = transform_pixeles_squares(5);
-        pieces[29] = Piece(x_cordinate, y_cordinate, "bishop","black","images");
-        x_cordinate = transform_pixeles_squares(2);
-        y_cordinate = transform_pixeles_squares(7);
-        pieces[30] = Piece(x_cordinate, y_cordinate, "bishop","white","images");
-        x_cordinate = transform_pixeles_squares(5);
-        pieces[31] = Piece(x_cordinate, y_cordinate, "bishop","white","images");
-        pieces[28].draw_piece(window);
-        pieces[29].draw_piece(window);
-        pieces[30].draw_piece(window);
-        pieces[31].draw_piece(window);
+        int x_cordinate = center_in_square(give_pixel_position_of_square(2));
+        int y_cordinate = center_in_square(give_pixel_position_of_square(0));
+        pieces[28] = Piece(x_cordinate, y_cordinate, "bishop 3","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(5));
+        pieces[29] = Piece(x_cordinate, y_cordinate, "bishop 4","black","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(2));
+        y_cordinate = center_in_square(give_pixel_position_of_square(7));
+        pieces[30] = Piece(x_cordinate, y_cordinate, "bishop 1","white","images");
+        x_cordinate = center_in_square(give_pixel_position_of_square(5));
+        pieces[31] = Piece(x_cordinate, y_cordinate, "bishop 2","white","images");
+        pieces[28].draw_piece(window,board.get_height());
+        pieces[29].draw_piece(window,board.get_height());
+        pieces[30].draw_piece(window,board.get_height());
+        pieces[31].draw_piece(window,board.get_height());
     }
 
     void place_pieces_start(sf::RenderWindow& window)
@@ -249,20 +264,22 @@ private:
         */
         if(mouseButtonEvent.button == sf::Mouse::Left)
         {
-            for(int i{0}; i < 32 ; ++i)
+            for(int i{0}; i < number_of_pieces ; ++i)
             {
                 int pxp {pieces[i].get_x_position()};
                 int pyp {pieces[i].get_y_position()};
-                if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp))
+                bool alive_status {pieces[i].alive};
+                if(piece_is_there(mouseButtonEvent.x,mouseButtonEvent.y,pxp,pyp) && alive_status)
                 {
                     selected_piece = &pieces[i];
-                    break;
+                    selected_piece_position.first = pxp;
+                    selected_piece_position.second = pyp;
                 }
             }
         }
     }
 
-    void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent)
+        void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent)
     {
         /*
         This function checks if the mouse button is released.
@@ -275,7 +292,10 @@ private:
             if (selected_piece != nullptr) 
             {
             //if piece is selected, place it in the square
-            selected_piece->set_position(center_in_square(x), center_in_square(y));
+            int center_x {center_in_square(x)};
+            int center_y {center_in_square(y)};
+            selected_piece->set_position(center_x, center_y);
+            bool status  = check_if_piece_is_there(x,y);
             selected_piece = nullptr;
             }
         }
@@ -297,6 +317,11 @@ private:
         }
     }
 
+    void return_to_orginal_position()
+    {
+        selected_piece->set_position(selected_piece_position.first, selected_piece_position.second);
+    }
+
     void handle_events(sf::Event& event, sf::RenderWindow& window)
     {
         /*
@@ -311,18 +336,60 @@ private:
                 window.close();
                 break;
             case sf::Event::MouseButtonPressed:
-                check_mouse_click_on_piece(event.mouseButton);                        
-                break;
-            case sf::Event::MouseButtonReleased:
-                check_mouse_button_released(event.mouseButton);
+                check_mouse_click_on_piece(event.mouseButton);
                 break;
             case sf::Event::MouseMoved:
                 check_moved_mouse(event.mouseButton, window);
                 break;
-        }
-                        
+            case sf::Event::MouseButtonReleased:
+                check_mouse_button_released(event.mouseButton);
+                break;
+        }          
     }
-    
+
+    bool check_if_piece_is_there(int x, int y)
+    {
+        int square_x = from_pixel_to_square(x);
+        int square_y = from_pixel_to_square(y);
+        for(int i{0}; i < number_of_pieces; ++i)
+        {
+            //Here we check if the piece is the same as the piece we are moving
+            if(&pieces[i]!=selected_piece)
+            {
+                int piece_square_x = from_pixel_to_square(pieces[i].get_x_position());
+                int piece_square_y = from_pixel_to_square(pieces[i].get_y_position());
+                //If piece we are moving goes into another piece, then eat.
+                if(piece_square_x == square_x && piece_square_y == square_y)
+                {
+                   if (pieces[i].get_color() != selected_piece->get_color())
+                   {
+                        pieces[i].alive = false;
+                        return true;
+                   }
+                    else
+                    {
+                        return_to_orginal_position();
+                        return false;
+                    } 
+                }
+            }
+        }
+        return false;
+    }
+
+    void show_selected_piece(sf::RenderWindow& window, Validator& validator)
+    {
+        if (selected_piece != nullptr) 
+        {
+            validator.show_possible_movements(
+                window,selected_piece->get_name(),
+                selected_piece->get_color(),
+                center_in_square(selected_piece->get_x_position()),
+                center_in_square(selected_piece->get_y_position())
+            );
+        }
+    }
+
 
 public:
 
@@ -334,38 +401,35 @@ public:
         sf::RenderWindow window;
         create_window(window);
         place_pieces_start(window);
+        Validator validator(board.get_height(), board.get_widht());
 
         // main event loop
         while (window.isOpen()) {
             sf::Event event;
-            
-            while (window.pollEvent(event)) 
-            {
-                handle_events(event, window);
-            }
-            
+        
             // clear the window
             window.clear(sf::Color::White);
             
             // draw the board and the pieces
             board.draw_board(window);
-            for (int i = 0; i < 32; i++) {
-                pieces[i].draw_piece(window);
+
+            show_selected_piece(window, validator);
+            
+            for (int i = 0; i < number_of_pieces; i++) {
+                pieces[i].draw_piece(window, board.get_height());
+            }
+
+            while (window.pollEvent(event)) 
+            {
+                handle_events(event, window);
             }
             
             // display the window
             window.display();
+            //slep for 10 seconds
         }
     }
 };
-
-
-
-
-
-
-
-
 
 
 int main() {

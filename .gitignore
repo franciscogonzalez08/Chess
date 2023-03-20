@@ -1,4 +1,5 @@
 *.o
-*.sh
+*app
 *app*
 images
+.vscode
