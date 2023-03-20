@@ -98,6 +98,40 @@ std::vector < std::pair < int, int >> Validator::king_movements(int x, int y, st
         y_movement
     };
     possible_movements.push_back(movement_coords);
+    y_movement = y + static_cast< int > (board_dims.first/8);
+    movement_coords = {
+        x_movement,
+        y_movement
+    };
+    possible_movements.push_back(movement_coords);
+    x_movement = x - static_cast < int > (board_dims.first / 8);
+    y_movement = y - static_cast < int > (board_dims.second / 8);
+    movement_coords = {
+        x_movement,
+        y_movement
+    };
+    possible_movements.push_back(movement_coords);
+    x_movement = x + static_cast < int > (board_dims.first / 8);
+    y_movement = y - static_cast < int > (board_dims.second / 8);
+    movement_coords = {
+        x_movement,
+        y_movement
+    };
+    possible_movements.push_back(movement_coords);
+    x_movement = x - static_cast < int > (board_dims.first / 8);
+    y_movement = y + static_cast < int > (board_dims.second / 8);
+    movement_coords = {
+        x_movement,
+        y_movement
+    };
+    possible_movements.push_back(movement_coords);
+    x_movement = x + static_cast < int > (board_dims.first / 8);
+    y_movement = y + static_cast < int > (board_dims.second / 8);
+    movement_coords = {
+        x_movement,
+        y_movement
+    };
+    possible_movements.push_back(movement_coords);
     return check_movements(possible_movements);
 }
 
@@ -308,7 +342,8 @@ std::vector < std::pair < int, int >> Validator::check_movements(std::vector < s
     return valid_movements;
 }
 
-void Validator::show_possible_movements(sf::RenderWindow & window, std::string piece_name, std::string piece_color, int x, int y) {
+void Validator::show_possible_movements(sf::RenderWindow & window, std::string piece_name, std::string piece_color, int x, int y,
+    std::vector < std::tuple < int, int, std::string >> const & pieces_info) {
     /*
     This function shows the possible movements of a piece.
     Arguments:
@@ -372,3 +407,26 @@ template < typename T >
         }
         return val;
     }
+
+/*
+std::vector<std::pair<int,int>> check_collision(std::vector < std::tuple < int, int, std::string >> const & pieces_info, 
+                                                std::vector<std::pair<int,int>> const & possible_movements)
+{
+    std::vector<std::pair<int,int>> valid_movements;
+    for (std::pair<int,int> movement : possible_movements)
+    {
+        for (std::tuple<int,int,std::string>  piece_info : pieces_info )
+        {
+            if (movement.first == std::get<0>(piece_info) && movement.second == std::get<1>(piece_info))
+            {
+
+            }
+            else
+            {
+                valid_movements.push_back(movement);
+            }
+        }       
+    }
+
+}
+*/

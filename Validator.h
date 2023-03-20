@@ -40,7 +40,8 @@ class Validator {
     int >> rook_movements(int x, int y, std::string color);
     std::vector < std::pair < int,
     int >> check_movements(std::vector < std::pair < int, int >> possible_movements);
-    void show_possible_movements(sf::RenderWindow & window, std::string name, std::string color, int x, int y);
+    void show_possible_movements(sf::RenderWindow & window, std::string name, std::string color, int x, int y,
+    std::vector < std::tuple < int, int, std::string >> const & pieces_info);
 
 };
 
