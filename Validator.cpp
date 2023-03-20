@@ -138,14 +138,50 @@ std::vector <std::pair<int,int>> Validator::queen_movements(int x, int y, std::s
     return check_movements(possible_movements);
 }
 
-/*
+
 std::vector <std::pair<int,int>> Validator::knight_movements(int x, int y, std::string color)
 {
+    /*
+    This function returns a vector with the possible movements of a knight.
+    Arguments:
+        x: x position of the knight
+        y: y position of the knight
+        color: color of the knight
+    */
     std::vector <std::pair<int,int>> possible_movements;
     possible_movements.push_back({x,y});
     int x_movement, y_movement;
+    x_movement = x + 2*static_cast<int>(board_dims.first/8);
+    y_movement = y + static_cast<int>(board_dims.second/8);
+    std::pair <int,int> movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    y_movement = y - static_cast<int>(board_dims.second/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x - 2*static_cast<int>(board_dims.first/8);
+    y_movement = y + static_cast<int>(board_dims.second/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    y_movement = y - static_cast<int>(board_dims.second/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x + static_cast<int>(board_dims.first/8);
+    y_movement = y + 2*static_cast<int>(board_dims.second/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x - static_cast<int>(board_dims.first/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x + static_cast<int>(board_dims.first/8);
+    y_movement = y - 2*static_cast<int>(board_dims.second/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x - static_cast<int>(board_dims.first/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    return check_movements(possible_movements);
 }
-*/
+
 std::vector <std::pair<int,int>> Validator::rook_movements(int x, int y, std::string color)
 {
     /*
@@ -265,7 +301,6 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
         }
     }
 
-    /*
     else if (new_name == "knight")
     {
         possible_movements = knight_movements(x,y,piece_color);
@@ -274,7 +309,7 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
             draw_square(window, movement.first, movement.second);
         }
     }
-    */
+    
     
 }
 
