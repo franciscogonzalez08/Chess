@@ -50,7 +50,117 @@ std::vector <std::pair<int,int>> Validator::pawn_movements(int x, int y, std::st
         std::pair <int,int> movement_coords = {x_movement, y_movement};
         possible_movements.push_back(movement_coords);
     }
-    return possible_movements;
+    return check_movements(possible_movements);
+}
+
+std::vector <std::pair<int,int>> Validator::king_movements(int x, int y, std::string color)
+{
+    /*
+    This function returns a vector with the possible movements of a king.
+    Arguments:
+        x: x position of the king
+        y: y position of the king
+        color: color of the king
+    */
+    std::vector <std::pair<int,int>> possible_movements;
+    possible_movements.push_back({x,y});
+    int x_movement, y_movement;
+    x_movement = x;
+    y_movement = y - static_cast<int>(board_dims.second/8);
+    std::pair <int,int> movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x;
+    y_movement = y + static_cast<int>(board_dims.second/8);
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x - static_cast<int>(board_dims.first/8);
+    y_movement = y;
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    x_movement = x + static_cast<int>(board_dims.first/8);
+    y_movement = y;
+    movement_coords = {x_movement, y_movement};
+    possible_movements.push_back(movement_coords);
+    return check_movements(possible_movements);
+}
+
+/*
+std::vector <std::pair<int,int>> Validator::queen_movements(int x, int y, std::string color)
+{
+    std::vector <std::pair<int,int>> possible_movements;
+    possible_movements.push_back({x,y});
+    int x_movement, y_movement;
+}
+std::vector <std::pair<int,int>> Validator::bishop_movements(int x, int y, std::string color)
+{
+    std::vector <std::pair<int,int>> possible_movements;
+    possible_movements.push_back({x,y});
+    int x_movement, y_movement;
+}
+std::vector <std::pair<int,int>> Validator::knight_movements(int x, int y, std::string color)
+{
+    std::vector <std::pair<int,int>> possible_movements;
+    possible_movements.push_back({x,y});
+    int x_movement, y_movement;
+}
+*/
+std::vector <std::pair<int,int>> Validator::rook_movements(int x, int y, std::string color)
+{
+    /*
+    This function returns a vector with the possible movements of a rook.
+    Arguments:
+        x: x position of the rook
+        y: y position of the rook
+        color: color of the rook
+    */
+    std::vector <std::pair<int,int>> possible_movements;
+    possible_movements.push_back({x,y});
+    int x_movement, y_movement;
+    for (int i{0}; i<8; ++i)
+    {
+        x_movement = x + (i - 8) * static_cast<int>(board_dims.first/8);
+        y_movement = y;
+        std::pair <int,int> movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        x_movement = x + i * static_cast<int>(board_dims.first/8);
+        y_movement = y;
+        movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        x_movement = x ;
+        y_movement = y + i * static_cast<int>(board_dims.first/8);;
+        movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        x_movement = x ;
+        y_movement = y + (i - 8) * static_cast<int>(board_dims.first/8);
+        movement_coords = {x_movement, y_movement};
+        possible_movements.push_back(movement_coords);
+        
+    }
+    return check_movements(possible_movements);
+}
+
+
+
+
+std::vector <std::pair<int,int>> Validator::check_movements(std::vector <std::pair<int,int>> possible_movements)
+{
+    /*
+    This function checks if the possible movements are valid.
+    Arguments:
+        possible_movements: vector with the possible movements of a piece
+    */
+    std::vector <std::pair<int,int>> valid_movements;
+    for (std::pair<int,int> movement : possible_movements)
+    {
+        if (
+            absolute_value(movement.first) <= board_dims.first && 
+            absolute_value(movement.second) <= board_dims.second
+            )
+        {
+            valid_movements.push_back(movement);
+        }
+    }
+    return valid_movements;
 }
 
 void Validator::show_possible_movements(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int x, int y)
@@ -66,6 +176,7 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
     */
     std::string new_name = transform_name(piece_name);
     std::vector <std::pair<int,int>> possible_movements;
+
     if (new_name == "pawn") 
     {
         possible_movements = pawn_movements(x,y,piece_color);
@@ -73,8 +184,56 @@ void Validator::show_possible_movements(sf::RenderWindow& window, std::string pi
         {
             draw_square(window, movement.first, movement.second);
         }
-
     }
+
+    else if (new_name == "king")
+    {
+        possible_movements = king_movements(x,y,piece_color);
+        for (std::pair<int,int> movement : possible_movements)
+        {
+            draw_square(window, movement.first, movement.second);
+        }
+    }
+
+    else if (new_name == "rook")
+    {
+        possible_movements = rook_movements(x,y,piece_color);
+        for (std::pair<int,int> movement : possible_movements)
+        {
+            draw_square(window, movement.first, movement.second);
+        }
+    }
+
+    /*
+    else if (new_name == "knight")
+    {
+        possible_movements = knight_movements(x,y,piece_color);
+        for (std::pair<int,int> movement : possible_movements)
+        {
+            draw_square(window, movement.first, movement.second);
+        }
+    }
+
+    
+    else if (new_name == "bishop")
+    {
+        possible_movements = bishop_movements(x,y,piece_color);
+        for (std::pair<int,int> movement : possible_movements)
+        {
+            draw_square(window, movement.first, movement.second);
+        }
+    }
+
+    else if (new_name == "queen")
+    {
+        possible_movements = queen_movements(x,y,piece_color);
+        for (std::pair<int,int> movement : possible_movements)
+        {
+            draw_square(window, movement.first, movement.second);
+        }
+    }
+    */
+    
 }
 
 
@@ -89,3 +248,10 @@ std::string Validator::transform_name(std::string piece_name)
     return new_name;
 }
 
+template <typename T>
+T Validator::absolute_value(T val) const {
+  if (val < 0) {
+    return -val;
+  }
+  return val;
+}
