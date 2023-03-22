@@ -375,14 +375,36 @@ class ChessGame {
     }
 
     void show_selected_piece(sf::RenderWindow & window, Validator & validator) {
+        /*
+        This function shows the possible moves of the selected piece.
+        Arguments:
+            window: window where the game is played
+            validator: validator of the game
+        */
         if (selected_piece != nullptr) {
-            validator.show_possible_movements(
+            validator.show_possible_moves(
                 window, selected_piece -> get_name(),
                 selected_piece -> get_color(),
                 center_in_square(selected_piece -> get_x_position()),
-                center_in_square(selected_piece -> get_y_position())
+                center_in_square(selected_piece -> get_y_position()),
+                get_pieces_positions()
             );
         }
+    }
+
+    std::vector<std::tuple<int, int,std::string>> get_pieces_positions() {
+        /*
+        This function returns the positions and color of the pieces alive in the board.
+        */
+        std::vector<std::tuple<int, int,std::string>> pieces_positions;
+        for (int i {0}; i < number_of_pieces; ++i) 
+        {
+            if (pieces[i].alive && selected_piece != &pieces[i])
+            {
+            pieces_positions.push_back(std::make_tuple(pieces[i].get_x_position(), pieces[i].get_y_position(), pieces[i].get_color()));
+            }
+        }
+        return pieces_positions;
     }
 
     public:
