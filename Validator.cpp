@@ -79,11 +79,12 @@ void Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_
         pieces: vector with the pieces of the board
     */
     
-    std::vector<std::pair<int,int>> possible_moves = compute_possible_moves(piece_name, piece_x_position, piece_y_position, pieces_info);
+    std::vector<std::pair<int,int>> possible_moves = compute_possible_moves(piece_name, piece_x_position, piece_y_position, pieces_info, piece_color);
     draw_possible_moves(window, possible_moves);    
 }
 
-std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string full_piece_name, int x, int y, std::vector<std::tuple<int, int,std::string>> pieces_info)
+std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string full_piece_name, 
+    int x, int y, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
     /*
     This function computes the possible moves of the piece.
@@ -100,20 +101,20 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
  
     if (piece_name == "pawn")
     {
-        possible_moves = assing_pawn_moves(x,y, pieces_info);
+        possible_moves = assing_pawn_moves(x,y, pieces_info, piece_color);
         return possible_moves;
     }
     
     if (piece_name == "rook")
     {
-        possible_moves = assing_rook_moves(x,y, pieces_info);
+        possible_moves = assing_rook_moves(x,y, pieces_info, piece_color);
         return possible_moves;
     }
 
     //Here is a warning because this may return nothing, not sure if this is a problem
 }
 
-std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info)
+std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
     /*
     This function computes the possible moves of the pawn.
@@ -125,8 +126,8 @@ std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int 
         a vector with the possible moves of the pawn
     */
     std::vector<std::pair<int,int>> possible_moves;
-    possible_moves = stack_moves(x_postion, y_position, 1, 1, pieces_info, possible_moves);
-    possible_moves = stack_moves(x_postion, y_position, 5, 1, pieces_info, possible_moves);
+    possible_moves = stack_moves(x_postion, y_position, 1, 1, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 5, 1, pieces_info, possible_moves,piece_color);
     return possible_moves;
 }
 
@@ -136,7 +137,8 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
                                             int direction, 
                                             int number_of_moves, 
                                             std::vector<std::tuple<int, int,std::string>> pieces_info, 
-                                            std::vector<std::pair<int,int>> original_possible_moves)
+                                            std::vector<std::pair<int,int>> original_possible_moves,
+                                            std::string piece_color)
 {
     /*
     This function stack moves in a given direction.
@@ -162,7 +164,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,i));
             //-- This part of the code repeat a lot, maybe it can be a function, but I am not sure how to do it --
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info, piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -178,7 +180,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,i));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -193,7 +195,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,0));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -208,7 +210,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,-i));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -223,7 +225,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,-i));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -238,7 +240,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,-i));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -253,7 +255,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,0));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -268,7 +270,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
         for(int i{0}; i <= number_of_moves; ++i)
         {
             possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,i));
-            if (!check_colision(possible_move, pieces_info))
+            if (!check_colision(possible_move, pieces_info,piece_color))
             {
                 possible_moves.push_back(possible_move);
             }
@@ -282,7 +284,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
     return possible_moves;
 }
 
-std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info)
+std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
     /*
     This function computes the possible moves of the rook.
@@ -297,14 +299,14 @@ std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int 
     std::pair<int,int> possible_move;
     //This looks like can be done in another method
     // TODO: make a function that does this
-    possible_moves = stack_moves(x_postion, y_position, 1, 8, pieces_info, possible_moves);
-    possible_moves = stack_moves(x_postion, y_position, 3, 8, pieces_info, possible_moves);
-    possible_moves = stack_moves(x_postion, y_position, 5, 8, pieces_info, possible_moves);
-    possible_moves = stack_moves(x_postion, y_position, 7, 8, pieces_info, possible_moves);
+    possible_moves = stack_moves(x_postion, y_position, 1, 8, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 3, 8, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 5, 8, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 7, 8, pieces_info, possible_moves,piece_color);
     return possible_moves;
 }
 
-bool Validator::check_colision(std::pair<int,int> new_move, std::vector<std::tuple<int, int,std::string>> pieces_info)
+bool Validator::check_colision(std::pair<int,int> new_move, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
     /*
     This function checks if the new move of the piece is on top of another piece.
@@ -316,7 +318,7 @@ bool Validator::check_colision(std::pair<int,int> new_move, std::vector<std::tup
     */
     for (std::tuple<int,int,std::string> piece_info: pieces_info)
     {
-        if (std::get<0>(piece_info) == new_move.first && std::get<1>(piece_info) == new_move.second)
+        if (std::get<0>(piece_info) == new_move.first && std::get<1>(piece_info) == new_move.second && std::get<2>(piece_info) == piece_color)
         {
             return true;
         }
