@@ -98,7 +98,6 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
     std::vector<std::pair<int,int>> possible_moves;
     std::string piece_name = transform_name(full_piece_name);
  
-    
     if (piece_name == "pawn")
     {
         possible_moves = assing_pawn_moves(x,y, pieces_info);
@@ -126,23 +125,162 @@ std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int 
         a vector with the possible moves of the pawn
     */
     std::vector<std::pair<int,int>> possible_moves;
-    std::pair<int,int> possible_move;
-    bool condition;
-    possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,1));
-    condition = check_colision(possible_move, pieces_info);
-    if (!condition)
-    {
-        possible_moves.push_back(possible_move);
-    }
-    possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,-1));
-    condition = check_colision(possible_move, pieces_info);
-    if (!condition)
-    {
-        possible_moves.push_back(possible_move);
-    }
+    possible_moves = stack_moves(x_postion, y_position, 1, 1, pieces_info, possible_moves);
+    possible_moves = stack_moves(x_postion, y_position, 5, 1, pieces_info, possible_moves);
     return possible_moves;
 }
 
+
+std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion, 
+                                            int y_position, 
+                                            int direction, 
+                                            int number_of_moves, 
+                                            std::vector<std::tuple<int, int,std::string>> pieces_info, 
+                                            std::vector<std::pair<int,int>> original_possible_moves)
+{
+    /*
+    This function stack moves in a given direction.
+    This diagram shows how the directions are given.
+                      6   5  4                         
+                      7   P  3
+                      8   1  2
+    So, if the direction is 1, and number of moves 2 then this function returns
+    a vector with two moves in direction 1.
+    Arguments:
+        x_postion: x position of the piece
+        y_position: y position of the piece
+        direction: direction of the moves
+        number_of_moves: number of moves in the given direction
+    Returns:
+        a vector with the possible moves of the piece
+    */
+    std::vector<std::pair<int,int>> possible_moves;
+    std::pair<int,int> possible_move;
+    if(direction == 1)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,i));
+            //-- This part of the code repeat a lot, maybe it can be a function, but I am not sure how to do it --
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+        //------------------------------------------------------------------------------------------------------
+    }
+    if(direction == 2)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,i));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    if(direction == 3)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,0));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    if(direction == 4)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,-i));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    if(direction == 5)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,-i));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    if(direction == 6)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,-i));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    if(direction == 7)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,0));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    if(direction == 8)
+    {
+        for(int i{0}; i <= number_of_moves; ++i)
+        {
+            possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,i));
+            if (!check_colision(possible_move, pieces_info))
+            {
+                possible_moves.push_back(possible_move);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    possible_moves.insert(possible_moves.end(), original_possible_moves.begin(), original_possible_moves.end());
+    return possible_moves;
+}
 
 std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
@@ -157,47 +295,12 @@ std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int 
     */
     std::vector<std::pair<int,int>> possible_moves;
     std::pair<int,int> possible_move;
-    bool condition;
-    for(int i{0}; i < 8; ++i)
-    {
-        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,i));
-        condition = check_colision(possible_move, pieces_info);
-        if (condition)
-        {
-            break;
-        }
-        possible_moves.push_back(possible_move);
-    }
-    for(int i{0}; i < 8; ++i)
-    {
-        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,-i));
-        condition = check_colision(possible_move, pieces_info);
-        if (condition)
-        {
-            break;
-        }
-        possible_moves.push_back(possible_move);
-    }
-    for(int i{0}; i < 8; ++i)
-    {
-        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,0));
-        condition = check_colision(possible_move, pieces_info);
-        if (condition)
-        {
-            break;
-        }
-        possible_moves.push_back(possible_move);
-    }
-    for(int i{0}; i < 8; ++i)
-    {
-        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,0));
-        condition = check_colision(possible_move, pieces_info);
-        if (condition)
-        {
-            break;
-        }
-        possible_moves.push_back(possible_move);
-    }
+    //This looks like can be done in another method
+    // TODO: make a function that does this
+    possible_moves = stack_moves(x_postion, y_position, 1, 8, pieces_info, possible_moves);
+    possible_moves = stack_moves(x_postion, y_position, 3, 8, pieces_info, possible_moves);
+    possible_moves = stack_moves(x_postion, y_position, 5, 8, pieces_info, possible_moves);
+    possible_moves = stack_moves(x_postion, y_position, 7, 8, pieces_info, possible_moves);
     return possible_moves;
 }
 
