@@ -24,6 +24,7 @@ void Validator::draw_square(sf::RenderWindow & window, int x, int y) {
 std::string Validator::transform_name(std::string piece_name) {
     /*
     This function transforms the name of the piece to a more readable name.
+    Pieces are named like pawn 2 or pawn 1, this function transforms the name to pawn. 
     Arguments:
         piece_name: name of the piece
     */
@@ -31,33 +32,68 @@ std::string Validator::transform_name(std::string piece_name) {
     return new_name;
 }
 
-std::pair<int,int> Validator::add_position(std::pair<int,int> piece_possition, int new_position)
+std::pair<int,int> Validator::add_position(std::pair<int,int> piece_possition, std::pair<int,int> new_position)
 {
+    /*
+    This function adds the new position to the piece position.
+    Given the piece position and the new position, this function returns the new position of the piece,
+    in relative coordinates, for example if the piece is in the position (0,0) and the new position is (1,1)
+    the function will coords to (1,1), but if piece is in (5,5), then new coords will be (6,6).
+    Arguments:
+        piece_possition: position of the piece
+        new_position: new position of the piece
+    Returns:
+        a pair of ints with the new position of the piece
+    */
     std::pair<int,int> square_dims = compute_square_width_height();
     int new_x_position, new_y_position;
-    if (new_position == 1)
-    {
-        //Test case for white piece when moving forwards.
-        new_x_position = piece_possition.first;
-        new_y_position = piece_possition.second - square_dims.second;
-        return std::make_pair(new_x_position, new_y_position); 
-    }
+    new_x_position = piece_possition.first + new_position.first * square_dims.first;
+    new_y_position = piece_possition.second + new_position.second * square_dims.second;
+    return std::make_pair(new_x_position, new_y_position);
 }
 
 std::pair<int,int> Validator::compute_square_width_height()
 {
+    /*
+    This function computes the width and height of the square.
+    The width and height of the square are computed based on the width and height of the board.
+    Arguments:
+        None
+    Returns:
+        a pair of ints with the width and height of the square
+    */
     return std::make_pair(static_cast <int> ( board_dims.first/8 ) , static_cast <int> (board_dims.second/8));
 }
 //Maybe pass the whole object ?? I am using all attributes.
 void Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,
                                         std::vector<std::tuple<int, int,std::string>>)
 {
+    /*
+    This function shows the possible moves of the piece.
+    Arguments:
+        window: window where the possible moves will be drawn
+        piece_name: name of the piece
+        piece_color: color of the piece
+        piece_x_position: x position of the piece
+        piece_y_position: y position of the piece
+        pieces: vector with the pieces of the board
+    */
     std::vector<std::pair<int,int>> possible_moves = compute_possible_moves(piece_name, piece_x_position, piece_y_position);
     draw_possible_moves(window, possible_moves);    
 }
 
 std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string full_piece_name, int x, int y)
 {
+    /*
+    This function computes the possible moves of the piece.
+    Given the name of the piece, the x and y position of the piece, this function returns a vector with the possible moves of the piece.
+    Arguments:
+        full_piece_name: name of the piece
+        x: x position of the piece
+        y: y position of the piece
+    Returns:
+        a vector with the possible moves of the piece
+    */
     std::vector<std::pair<int,int>> possible_moves;
     std::string piece_name = transform_name(full_piece_name);
     if (piece_name == "pawn")
@@ -69,13 +105,27 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
 
 std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position)
 {
+    /*
+    This function computes the possible moves of the pawn.
+    Arguments:
+        x_postion: x position of the pawn
+        y_position: y position of the pawn
+    Returns:
+        a vector with the possible moves of the pawn
+    */
     std::vector<std::pair<int,int>> possible_moves;
-    possible_moves.push_back(add_position(std::make_pair(x_postion,y_position), 1));
+    possible_moves.push_back(add_position(std::make_pair(x_postion,y_position), std::make_pair(0,1)));
     return possible_moves;    
 }
 
 void Validator::draw_possible_moves(sf::RenderWindow & window ,std::vector<std::pair<int,int>> possible_moves)
 {
+    /*
+    This function draws the possible moves of the piece on the board.
+    Arguments:
+        window: window where the possible moves will be drawn
+        possible_moves: vector with the possible moves of the piece
+    */
     for(std::pair<int,int> moves : possible_moves)
     {
         draw_square(window ,moves.first, moves.second);

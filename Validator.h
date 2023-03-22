@@ -22,7 +22,7 @@ class Validator {
     int > board_dims;
     std::string transform_name(std::string piece_name);
     void draw_square(sf::RenderWindow& window, int x, int y);
-    std::pair<int,int> add_position(std::pair<int,int> piece_possition, int new_position);
+    std::pair<int,int> add_position(std::pair<int,int> piece_possition, std::pair<int,int> new_position);
     std::pair<int,int> compute_square_width_height();
     std::vector<std::pair<int,int>> assing_pawn_moves(int x_postion, int y_position);
     std::vector<std::pair<int,int>> compute_possible_moves(std::string piece_name, int x, int y);
