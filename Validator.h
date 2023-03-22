@@ -24,10 +24,11 @@ class Validator {
     void draw_square(sf::RenderWindow& window, int x, int y);
     std::pair<int,int> add_position(std::pair<int,int> piece_possition, std::pair<int,int> new_position);
     std::pair<int,int> compute_square_width_height();
-    std::vector<std::pair<int,int>> assing_pawn_moves(int x_postion, int y_position);
-    std::vector<std::pair<int,int>> compute_possible_moves(std::string piece_name, int x, int y);
+    //std::vector<std::pair<int,int>> assing_pawn_moves(int x_postion, int y_position);
+    std::vector<std::pair<int,int>> compute_possible_moves(std::string piece_name, int x, int y, std::vector<std::tuple<int, int,std::string>> pieces_info);
     void draw_possible_moves(sf::RenderWindow & window, std::vector<std::pair<int,int>> possible_moves);
-    bool check_colision(std::pair<int,int> new_move, std::vector<std::pair<int,int>> pieces_positon);
+    bool check_colision(std::pair<int,int> new_move, std::vector<std::tuple<int, int,std::string>> pieces_info);
+    std::vector<std::pair<int,int>> assing_rook_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info);
 
     public: Validator(int x, int y);
     void show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,

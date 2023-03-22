@@ -66,7 +66,7 @@ std::pair<int,int> Validator::compute_square_width_height()
 }
 //Maybe pass the whole object ?? I am using all attributes.
 void Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,
-                                        std::vector<std::tuple<int, int,std::string>>)
+                                        std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
     /*
     This function shows the possible moves of the piece.
@@ -78,11 +78,12 @@ void Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_
         piece_y_position: y position of the piece
         pieces: vector with the pieces of the board
     */
-    std::vector<std::pair<int,int>> possible_moves = compute_possible_moves(piece_name, piece_x_position, piece_y_position);
+    
+    std::vector<std::pair<int,int>> possible_moves = compute_possible_moves(piece_name, piece_x_position, piece_y_position, pieces_info);
     draw_possible_moves(window, possible_moves);    
 }
 
-std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string full_piece_name, int x, int y)
+std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string full_piece_name, int x, int y, std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
     /*
     This function computes the possible moves of the piece.
@@ -97,50 +98,79 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
     std::vector<std::pair<int,int>> possible_moves;
     std::string piece_name = transform_name(full_piece_name);
  
+    /*
     if (piece_name == "pawn")
     {
         possible_moves = assing_pawn_moves(x,y);
         return possible_moves;
     }
-/*
-    if (piece_name == "queen")
+    */
+    if (piece_name == "rook")
     {
-        possible_moves = assing_queen_moves(x,y);
+        possible_moves = assing_rook_moves(x,y, pieces_info);
         return possible_moves;
     }
 
-*/
 }
-
+/*
 std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position)
 {
-    /*
-    This function computes the possible moves of the pawn.
-    Arguments:
-        x_postion: x position of the pawn
-        y_position: y position of the pawn
-    Returns:
-        a vector with the possible moves of the pawn
-    */
     std::vector<std::pair<int,int>> possible_moves;
     possible_moves.push_back(add_position(std::make_pair(x_postion,y_position), std::make_pair(0,1)));
     return possible_moves;    
 }
+ */
 
-std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position)
+
+std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
-    /*
-    This function computes the possible moves of the pawn.
-    Arguments:
-        x_postion: x position of the pawn
-        y_position: y position of the pawn
-    Returns:
-        a vector with the possible moves of the pawn
-    */
-    std::vector<std::pair<int,int>> possible_moves;  
+    std::vector<std::pair<int,int>> possible_moves;
+    std::pair<int,int> possible_move;
+    bool condition;
+    for(int i{0}; i < 8; ++i)
+    {
+        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,i));
+        condition = check_colision(possible_move, pieces_info);
+        if (condition)
+        {
+            break;
+        }
+        possible_moves.push_back(possible_move);
+    }
+    for(int i{0}; i < 8; ++i)
+    {
+        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,-i));
+        condition = check_colision(possible_move, pieces_info);
+        if (condition)
+        {
+            break;
+        }
+        possible_moves.push_back(possible_move);
+    }
+    for(int i{0}; i < 8; ++i)
+    {
+        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(i,0));
+        condition = check_colision(possible_move, pieces_info);
+        if (condition)
+        {
+            break;
+        }
+        possible_moves.push_back(possible_move);
+    }
+    for(int i{0}; i < 8; ++i)
+    {
+        possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(-i,0));
+        condition = check_colision(possible_move, pieces_info);
+        if (condition)
+        {
+            break;
+        }
+        possible_moves.push_back(possible_move);
+    }
+    return possible_moves;
 }
 
-bool Validator::check_colision(std::pair<int,int> new_move, std::vector<std::pair<int,int>> pieces_positon)
+bool Validator::check_colision(std::pair<int,int> new_move, std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
     /*
     This function checks if the new move of the piece is on top of another piece.
@@ -150,15 +180,15 @@ bool Validator::check_colision(std::pair<int,int> new_move, std::vector<std::pai
     Returns:
         a boolean, true if there is a colision, false otherwise
     */
-    for (std::pair<int,int> piece_position: pieces_positon)
+    for (std::tuple<int,int,std::string> piece_info: pieces_info)
     {
-        if (piece_position == new_move)
+        if (std::get<0>(piece_info) == new_move.first && std::get<1>(piece_info) == new_move.second)
         {
             return true;
         }
     }
     return false;
-} 
+}
 
 void Validator::draw_possible_moves(sf::RenderWindow & window ,std::vector<std::pair<int,int>> possible_moves)
 {
