@@ -98,32 +98,63 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
     std::vector<std::pair<int,int>> possible_moves;
     std::string piece_name = transform_name(full_piece_name);
  
-    /*
+    
     if (piece_name == "pawn")
     {
-        possible_moves = assing_pawn_moves(x,y);
+        possible_moves = assing_pawn_moves(x,y, pieces_info);
         return possible_moves;
     }
-    */
+    
     if (piece_name == "rook")
     {
         possible_moves = assing_rook_moves(x,y, pieces_info);
         return possible_moves;
     }
 
+    //Here is a warning because this may return nothing, not sure if this is a problem
 }
-/*
-std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position)
+
+std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
+    /*
+    This function computes the possible moves of the pawn.
+    Arguments:
+        x_postion: x position of the pawn
+        y_position: y position of the pawn
+        pieces_info: vector with the pieces of the board
+    Returns:
+        a vector with the possible moves of the pawn
+    */
     std::vector<std::pair<int,int>> possible_moves;
-    possible_moves.push_back(add_position(std::make_pair(x_postion,y_position), std::make_pair(0,1)));
-    return possible_moves;    
+    std::pair<int,int> possible_move;
+    bool condition;
+    possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,1));
+    condition = check_colision(possible_move, pieces_info);
+    if (!condition)
+    {
+        possible_moves.push_back(possible_move);
+    }
+    possible_move = add_position(std::make_pair(x_postion,y_position), std::make_pair(0,-1));
+    condition = check_colision(possible_move, pieces_info);
+    if (!condition)
+    {
+        possible_moves.push_back(possible_move);
+    }
+    return possible_moves;
 }
- */
 
 
 std::vector<std::pair<int,int>> Validator::assing_rook_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
+    /*
+    This function computes the possible moves of the rook.
+    Arguments:
+        x_postion: x position of the rook
+        y_position: y position of the rook
+        pieces_info: vector with the pieces of the board
+    Returns:
+        a vector with the possible moves of the rook
+    */
     std::vector<std::pair<int,int>> possible_moves;
     std::pair<int,int> possible_move;
     bool condition;
