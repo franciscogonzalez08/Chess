@@ -34,7 +34,7 @@ class Validator {
 
 
     public: Validator(int x, int y);
-    void show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,
+    std::vector<std::pair<int,int>> show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,
                             std::vector<std::tuple<int, int,std::string>>);
 
 };

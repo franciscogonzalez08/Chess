@@ -65,7 +65,7 @@ std::pair<int,int> Validator::compute_square_width_height()
     return std::make_pair(static_cast <int> ( board_dims.first/8 ) , static_cast <int> (board_dims.second/8));
 }
 //Maybe pass the whole object ?? I am using all attributes.
-void Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,
+std::vector<std::pair<int,int>> Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_name, std::string piece_color, int piece_x_position, int piece_y_position,
                                         std::vector<std::tuple<int, int,std::string>> pieces_info)
 {
     /*
@@ -80,7 +80,8 @@ void Validator::show_possible_moves(sf::RenderWindow& window, std::string piece_
     */
     
     std::vector<std::pair<int,int>> possible_moves = compute_possible_moves(piece_name, piece_x_position, piece_y_position, pieces_info, piece_color);
-    draw_possible_moves(window, possible_moves);    
+    draw_possible_moves(window, possible_moves);
+    return possible_moves;    
 }
 
 std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string full_piece_name, 
@@ -301,7 +302,7 @@ std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion,
             {
                 possible_moves.push_back(possible_move);
                 break;
-            }
+               }
             else if (status == 0)
             {
                 possible_moves.push_back(possible_move);

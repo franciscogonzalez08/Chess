@@ -280,7 +280,7 @@ class ChessGame {
         }
     }
 
-    void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent) {
+    void check_mouse_button_released(sf::Event::MouseButtonEvent mouseButtonEvent, std::vector<std::pair<int,int>> & possible_moves) {
         /*
         This function checks if the mouse button is released.
         Arguments:
@@ -309,6 +309,20 @@ class ChessGame {
 
     }
 
+    bool check_valid_position(int x, int y,std::vector<std::pair<int,int>> & possible_moves) {
+        /*
+        This function checks if the piece is placed in a valid position.
+        Arguments:
+            possible_moves: vector of possible moves
+        */
+        for (std::pair<int,int> move : possible_moves) {
+            if (move.first == x && move.second == y) {
+                    return true;
+                }
+            }
+        return false;
+        }
+
     void check_moved_mouse(sf::Event::MouseButtonEvent mouseButtonEvent, sf::RenderWindow & window) {
         /*
         This function checks if the mouse is moved.
@@ -326,7 +340,7 @@ class ChessGame {
         selected_piece -> set_position(selected_piece_position.first, selected_piece_position.second);
     }
 
-    void handle_events(sf::Event & event, sf::RenderWindow & window) {
+    void handle_events(sf::Event & event, sf::RenderWindow & window, std::vector<std::pair<int,int>> & moves) {
         /*
         This function handles the events of the game.
         Arguments:
@@ -344,7 +358,7 @@ class ChessGame {
             check_moved_mouse(event.mouseButton, window);
             break;
         case sf::Event::MouseButtonReleased:
-            check_mouse_button_released(event.mouseButton);
+            check_mouse_button_released(event.mouseButton, moves);
             break;
         }
     }
@@ -364,7 +378,9 @@ class ChessGame {
                     if (pieces[i].get_color() != selected_piece -> get_color()) {
                         pieces[i].alive = false;
                         return true;
-                    } else {
+                    } 
+                    else if (pieces[i].alive) 
+                    {
                         return_to_orginal_position();
                         return false;
                     }
@@ -374,7 +390,7 @@ class ChessGame {
         return false;
     }
 
-    void show_selected_piece(sf::RenderWindow & window, Validator & validator) {
+    std::vector<std::pair<int,int>> show_selected_piece(sf::RenderWindow & window, Validator & validator) {
         /*
         This function shows the possible moves of the selected piece.
         Arguments:
@@ -382,6 +398,7 @@ class ChessGame {
             validator: validator of the game
         */
         if (selected_piece != nullptr) {
+            std::vector<std::pair<int,int>> possible_moves = 
             validator.show_possible_moves(
                 window, selected_piece -> get_name(),
                 selected_piece -> get_color(),
@@ -389,7 +406,9 @@ class ChessGame {
                 center_in_square(selected_piece -> get_y_position()),
                 get_pieces_positions()
             );
+            return possible_moves;
         }
+        return {};
     }
 
     std::vector<std::tuple<int, int,std::string>> get_pieces_positions() {
@@ -428,14 +447,14 @@ class ChessGame {
             // draw the board and the pieces
             board.draw_board(window);
 
-            show_selected_piece(window, validator);
+            std::vector<std::pair<int,int>> possible_moves = show_selected_piece(window, validator);
 
             for (int i = 0; i < number_of_pieces; i++) {
                 pieces[i].draw_piece(window, board.get_height());
             }
 
             while (window.pollEvent(event)) {
-                handle_events(event, window);
+                handle_events(event, window, possible_moves);
             }
 
             // display the window
