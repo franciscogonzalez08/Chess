@@ -131,11 +131,6 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
         possible_moves = assing_king_moves(x,y, pieces_info, piece_color);
         return possible_moves;
     }
-
-
-
-
-
     //Here is a warning because this may return nothing, not sure if this is a problem
 }
 
@@ -158,6 +153,15 @@ std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int 
 
 std::vector<std::pair<int,int>> Validator :: assing_queen_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
+    /*
+    This function computes the possible moves of the queen.
+    Arguments:
+        x_postion: x position of the queen
+        y_position: y position of the queen
+        pieces_info: vector with the pieces of the board
+    Returns:
+        a vector with the possible moves of the queen
+    */
     std::vector<std::pair<int,int>> possible_moves;
     for(int i{1}; i <= 8; ++i)
     {
@@ -168,6 +172,15 @@ std::vector<std::pair<int,int>> Validator :: assing_queen_moves(int x_postion, i
 
 std::vector<std::pair<int,int>> Validator :: assing_king_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
+    /*
+    This function computes the possible moves of the king.
+    Arguments:
+        x_postion: x position of the king
+        y_position: y position of the king
+        pieces_info: vector with the pieces of the board
+    Returns:
+        a vector with the possible moves of the king
+    */
     std::vector<std::pair<int,int>> possible_moves;
     for(int i{1}; i <= 8; ++i)
     {
@@ -178,6 +191,15 @@ std::vector<std::pair<int,int>> Validator :: assing_king_moves(int x_postion, in
 
 std::vector<std::pair<int,int>> Validator :: assing_bishop_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
+    /*
+    This function computes the possible moves of the bishop.
+    Arguments:
+        x_postion: x position of the bishop
+        y_position: y position of the bishop
+        pieces_info: vector with the pieces of the board
+    Returns:
+        a vector with the possible moves of the bishop
+    */
     std::vector<std::pair<int,int>> possible_moves;
     possible_moves = stack_moves(x_postion, y_position, 2, 8, pieces_info, possible_moves,piece_color);
     possible_moves = stack_moves(x_postion, y_position, 4, 8, pieces_info, possible_moves,piece_color);
@@ -188,11 +210,24 @@ std::vector<std::pair<int,int>> Validator :: assing_bishop_moves(int x_postion, 
 
 std::vector<std::pair<int,int>> Validator :: assing_knight_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
 {
+    /*
+    This function computes the possible moves of the knight.
+    Arguments:
+        x_postion: x position of the knight
+        y_position: y position of the knight
+        pieces_info: vector with the pieces of the board
+    Returns:
+        a vector with the possible moves of the knight
+    */
     std::vector<std::pair<int,int>> possible_moves;
-    possible_moves = stack_moves(x_postion, y_position, 2, 2, pieces_info, possible_moves,piece_color);
-    possible_moves = stack_moves(x_postion, y_position, 4, 2, pieces_info, possible_moves,piece_color);
-    possible_moves = stack_moves(x_postion, y_position, 6, 2, pieces_info, possible_moves,piece_color);
-    possible_moves = stack_moves(x_postion, y_position, 8, 2, pieces_info, possible_moves,piece_color);
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(1,2)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(1,-2)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(-1,2)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(-1,-2)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(2,1)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(2,-1)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(-2,1)));
+    possible_moves.push_back(add_position(std::make_pair(x_postion, y_position), std::make_pair(-2,-1)));
     return possible_moves;
 }
 
