@@ -111,6 +111,30 @@ std::vector<std::pair<int,int>> Validator::compute_possible_moves(std::string fu
         possible_moves = assing_rook_moves(x,y, pieces_info, piece_color);
         return possible_moves;
     }
+    if (piece_name == "knight")
+    {
+        possible_moves = assing_knight_moves(x,y, pieces_info, piece_color);
+        return possible_moves;
+    }
+    if (piece_name == "bishop")
+    {
+        possible_moves = assing_bishop_moves(x,y, pieces_info, piece_color);
+        return possible_moves;
+    }
+    if (piece_name == "queen")
+    {
+        possible_moves = assing_queen_moves(x,y, pieces_info, piece_color);
+        return possible_moves;
+    }
+    if (piece_name == "king")
+    {
+        possible_moves = assing_king_moves(x,y, pieces_info, piece_color);
+        return possible_moves;
+    }
+
+
+
+
 
     //Here is a warning because this may return nothing, not sure if this is a problem
 }
@@ -132,6 +156,45 @@ std::vector<std::pair<int,int>> Validator::assing_pawn_moves(int x_postion, int 
     return possible_moves;
 }
 
+std::vector<std::pair<int,int>> Validator :: assing_queen_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
+{
+    std::vector<std::pair<int,int>> possible_moves;
+    for(int i{1}; i <= 8; ++i)
+    {
+        possible_moves = stack_moves(x_postion, y_position, i, 8, pieces_info, possible_moves,piece_color);
+    }
+    return possible_moves;
+}
+
+std::vector<std::pair<int,int>> Validator :: assing_king_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
+{
+    std::vector<std::pair<int,int>> possible_moves;
+    for(int i{1}; i <= 8; ++i)
+    {
+        possible_moves = stack_moves(x_postion, y_position, i, 1, pieces_info, possible_moves,piece_color);
+    }
+    return possible_moves;
+}
+
+std::vector<std::pair<int,int>> Validator :: assing_bishop_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
+{
+    std::vector<std::pair<int,int>> possible_moves;
+    possible_moves = stack_moves(x_postion, y_position, 2, 8, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 4, 8, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 6, 8, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 8, 8, pieces_info, possible_moves,piece_color);
+    return possible_moves;
+}
+
+std::vector<std::pair<int,int>> Validator :: assing_knight_moves(int x_postion, int y_position, std::vector<std::tuple<int, int,std::string>> pieces_info, std::string piece_color)
+{
+    std::vector<std::pair<int,int>> possible_moves;
+    possible_moves = stack_moves(x_postion, y_position, 2, 2, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 4, 2, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 6, 2, pieces_info, possible_moves,piece_color);
+    possible_moves = stack_moves(x_postion, y_position, 8, 2, pieces_info, possible_moves,piece_color);
+    return possible_moves;
+}
 
 std::vector<std::pair<int,int>> Validator::stack_moves(int x_postion, 
                                             int y_position, 
