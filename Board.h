@@ -20,7 +20,7 @@ class Board {
         int height
     );
     void draw_board(sf::RenderWindow & window);
-    int get_widht();
+    int get_widht(); // This should be private
     int get_height();
 };
 
